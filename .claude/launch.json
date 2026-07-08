@@ -1,0 +1,19 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "mobile-web",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["expo", "start", "--web", "--port", "19006"],
+      "cwd": "mobile",
+      "port": 19006
+    },
+    {
+      "name": "admin",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "admin",
+      "port": 5173
+    }
+  ]
+}

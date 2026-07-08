@@ -1,0 +1,105 @@
+[
+  {
+    "slug": "portal_da_calma",
+    "title": "Portal da Calma",
+    "left_hz": 200.0,
+    "right_hz": 207.0,
+    "noise": "pink",
+    "axes": [
+      "water",
+      "ether"
+    ],
+    "moods": [
+      "calm",
+      "deep"
+    ],
+    "description": "Batida percebida de 7 Hz sobre ruído rosa. Relaxamento contemplativo.",
+    "file": "portal_da_calma.wav",
+    "beat_hz": 7.0,
+    "duration_seconds": 60,
+    "sample_rate": 44100
+  },
+  {
+    "slug": "aguas_profundas",
+    "title": "Águas Profundas",
+    "left_hz": 150.0,
+    "right_hz": 154.0,
+    "noise": "brown",
+    "axes": [
+      "water",
+      "night"
+    ],
+    "moods": [
+      "calm",
+      "dark",
+      "deep"
+    ],
+    "description": "Batida percebida de 4 Hz sobre ruído marrom. Preparação para o sono.",
+    "file": "aguas_profundas.wav",
+    "beat_hz": 4.0,
+    "duration_seconds": 60,
+    "sample_rate": 44100
+  },
+  {
+    "slug": "clareira_do_foco",
+    "title": "Clareira do Foco",
+    "left_hz": 220.0,
+    "right_hz": 234.0,
+    "noise": "pink",
+    "axes": [
+      "air",
+      "fire"
+    ],
+    "moods": [
+      "focused",
+      "airy"
+    ],
+    "description": "Batida percebida de 14 Hz sobre ruído rosa. Foco leve.",
+    "file": "clareira_do_foco.wav",
+    "beat_hz": 14.0,
+    "duration_seconds": 60,
+    "sample_rate": 44100
+  },
+  {
+    "slug": "raiz_da_montanha",
+    "title": "Raiz da Montanha",
+    "left_hz": 136.0,
+    "right_hz": 142.0,
+    "noise": "brown",
+    "axes": [
+      "earth",
+      "root"
+    ],
+    "moods": [
+      "grounded",
+      "deep",
+      "warm"
+    ],
+    "description": "Batida percebida de 6 Hz sobre ruído marrom. Aterramento.",
+    "file": "raiz_da_montanha.wav",
+    "beat_hz": 6.0,
+    "duration_seconds": 60,
+    "sample_rate": 44100
+  },
+  {
+    "slug": "silencio_expandido",
+    "title": "Silêncio Expandido",
+    "left_hz": 180.0,
+    "right_hz": 183.0,
+    "noise": "none",
+    "axes": [
+      "ether",
+      "sky"
+    ],
+    "moods": [
+      "contemplative",
+      "vast",
+      "sacred"
+    ],
+    "description": "Batida percebida de 3 Hz em tom puro. Contemplação profunda.",
+    "file": "silencio_expandido.wav",
+    "beat_hz": 3.0,
+    "duration_seconds": 60,
+    "sample_rate": 44100
+  }
+]

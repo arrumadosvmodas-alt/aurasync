@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+.pytest_cache/
+
+# Node
+node_modules/
+dist/
+.expo/
+web-build/
+
+# Banco e assets gerados em dev
+backend/aurasync.db
+storage/audio/*.wav
+storage/audio/*.mp3
+storage/images/*
+!storage/audio/.gitkeep
+!storage/images/.gitkeep
+
+# Ambiente
+.env
+.env.local
+
+# IDE / SO
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
