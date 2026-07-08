@@ -6,20 +6,22 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.api.deps import require_admin
+from app.api.deps import require_admin_user
 from app.api.serializers import serialize_content
 from app.db import get_db
-from app.models import AssetLicense, AudioAsset, ContentItem
+from app.models import AssetLicense, AudioAsset, ContentItem, User
 from app.schemas.schemas import (
     AudioAssetIn,
     ContentItemIn,
     ContentItemOut,
     ContentItemPatch,
     LicenseIn,
+    UserAdminOut,
+    UserPatch,
 )
 from app.services.publishing import missing_licenses
 
-router = APIRouter(prefix="/admin", tags=["admin"], dependencies=[Depends(require_admin)])
+router = APIRouter(prefix="/admin", tags=["admin"], dependencies=[Depends(require_admin_user)])
 
 
 @router.get("/content", response_model=list[ContentItemOut])
@@ -99,3 +101,37 @@ def unpublish_content(item_id: str, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(item)
     return serialize_content(db, item)
+
+
+@router.get("/users", response_model=list[UserAdminOut])
+def list_users(db: Session = Depends(get_db)):
+    return db.execute(select(User).order_by(User.created_at.desc())).scalars().all()
+
+
+@router.patch("/users/{user_id}", response_model=UserAdminOut)
+def update_user(
+    user_id: str,
+    body: UserPatch,
+    db: Session = Depends(get_db),
+    current: User = Depends(require_admin_user),
+):
+    try:
+        body.validate_domain()
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+
+    target = db.get(User, user_id)
+    if target is None:
+        raise HTTPException(404, "Usuário não encontrado")
+
+    if target.id == current.id:
+        if body.role == "user":
+            raise HTTPException(400, "Você não pode remover seu próprio acesso de administrador")
+        if body.is_active is False:
+            raise HTTPException(400, "Você não pode desativar a própria conta")
+
+    for field, value in body.model_dump(exclude_unset=True).items():
+        setattr(target, field, value)
+    db.commit()
+    db.refresh(target)
+    return target

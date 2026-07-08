@@ -32,8 +32,31 @@ class UserOut(BaseModel):
     id: str
     email: str
     display_name: str | None
+    role: str
+    is_active: bool
 
     model_config = {"from_attributes": True}
+
+
+class UserAdminOut(BaseModel):
+    id: str
+    email: str
+    display_name: str | None
+    role: str
+    is_active: bool
+    created_at: datetime
+
+    model_config = {"from_attributes": True}
+
+
+class UserPatch(BaseModel):
+    role: str | None = None
+    is_active: bool | None = None
+
+    def validate_domain(self) -> "UserPatch":
+        if self.role is not None and self.role not in ("user", "admin"):
+            raise ValueError("role deve ser 'user' ou 'admin'")
+        return self
 
 
 # ---------- Onboarding / preferências ----------

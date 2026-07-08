@@ -1,6 +1,3 @@
-ADMIN = {"X-Admin-Token": "dev-admin-token"}
-
-
 def test_health_e_meta(client):
     assert client.get("/health").json()["status"] == "ok"
     meta = client.get("/meta").json()
@@ -8,7 +5,7 @@ def test_health_e_meta(client):
     assert "médico" in meta["disclaimer"]
 
 
-def test_fluxo_auth_onboarding_favoritos(client, auth_headers):
+def test_fluxo_auth_onboarding_favoritos(client, auth_headers, admin_headers):
     # onboarding
     resp = client.post(
         "/onboarding",
@@ -28,12 +25,12 @@ def test_fluxo_auth_onboarding_favoritos(client, auth_headers):
     item = client.post(
         "/admin/content",
         json={"title": "Portal Teste", "type": "binaural", "spiritual_axis": ["water"]},
-        headers=ADMIN,
+        headers=admin_headers,
     ).json()
     audio = client.post(
         f"/admin/content/{item['id']}/audio",
         json={"storage_path": "audio/teste.wav", "format": "wav"},
-        headers=ADMIN,
+        headers=admin_headers,
     ).json()
     client.post(
         "/admin/licenses",
@@ -43,9 +40,9 @@ def test_fluxo_auth_onboarding_favoritos(client, auth_headers):
             "source_name": "AuraSync",
             "license_name": "Proprietary",
         },
-        headers=ADMIN,
+        headers=admin_headers,
     )
-    published = client.post(f"/admin/content/{item['id']}/publish", headers=ADMIN)
+    published = client.post(f"/admin/content/{item['id']}/publish", headers=admin_headers)
     assert published.status_code == 200, published.text
 
     # catálogo público lista o item publicado
@@ -81,7 +78,7 @@ def test_fluxo_auth_onboarding_favoritos(client, auth_headers):
 
 
 def test_admin_exige_token(client):
-    assert client.get("/admin/content").status_code == 403
+    assert client.get("/admin/content").status_code == 401
 
 
 def test_onboarding_valida_objetivo(client, auth_headers):

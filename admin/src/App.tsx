@@ -1,24 +1,26 @@
-import { useCallback, useEffect, useState } from 'react';
-
-import { adminApi, getAdminToken, setAdminToken } from './api';
+import { useEffect, useState } from 'react';
+import { adminApi, clearAdminToken, getAdminToken, login, setAdminToken, type User } from './api';
 import type { ContentItem } from './api';
 import { ContentForm } from './ContentForm';
 import { ContentTable } from './ContentTable';
+import { UsersTable } from './UsersTable';
 
-function TokenGate({ onReady }: { onReady: () => void }) {
-  const [token, setToken] = useState(getAdminToken());
+function LoginScreen({ onReady }: { onReady: () => void }) {
+  const [email, setEmail] = useState('admin@aurasync.app');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  const submit = async () => {
+  const handleLogin = async () => {
+    if (!email || !password) return;
     setBusy(true);
     setError(null);
-    setAdminToken(token);
     try {
-      await adminApi('/admin/content');
+      const result = await login(email, password);
+      setAdminToken(result.access_token);
       onReady();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Token inválido');
+      setError(e instanceof Error ? e.message : 'Erro ao fazer login');
     } finally {
       setBusy(false);
     }
@@ -27,13 +29,28 @@ function TokenGate({ onReady }: { onReady: () => void }) {
   return (
     <div className="card" style={{ maxWidth: 420, margin: '80px auto' }}>
       <h1>AuraSync CMS</h1>
-      <p className="hint">Token de admin (dev: "dev-admin-token")</p>
-      <label>X-Admin-Token</label>
-      <input value={token} onChange={(e) => setToken(e.target.value)} type="password" />
+      <p className="hint">Faça login com sua conta de administrador</p>
+      <label>E-mail</label>
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="admin@aurasync.app"
+        disabled={busy}
+      />
+      <label>Senha</label>
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Senha"
+        disabled={busy}
+        onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+      />
       {error ? <p className="error">{error}</p> : null}
       <div style={{ marginTop: 16 }}>
-        <button onClick={submit} disabled={busy || !token}>
-          {busy ? 'Verificando…' : 'Entrar'}
+        <button onClick={handleLogin} disabled={busy || !email || !password}>
+          {busy ? 'Entrando...' : 'Entrar'}
         </button>
       </div>
     </div>
@@ -41,37 +58,101 @@ function TokenGate({ onReady }: { onReady: () => void }) {
 }
 
 export default function App() {
-  const [ready, setReady] = useState(false);
+  const [logged, setLogged] = useState(!!getAdminToken());
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [items, setItems] = useState<ContentItem[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [tab, setTab] = useState<'content' | 'users'>('content');
+  const [loading, setLoading] = useState(false);
 
-  const load = useCallback(async () => {
+  const load = async () => {
+    if (!logged) return;
+    setLoading(true);
     try {
-      setItems(await adminApi<ContentItem[]>('/admin/content'));
+      const [itemsData, usersData, meData] = await Promise.all([
+        adminApi<ContentItem[]>('/admin/content').catch(() => []),
+        adminApi<User[]>('/admin/users').catch(() => []),
+        adminApi<User>('/auth/me').catch(() => null),
+      ]);
+      setItems(itemsData || []);
+      setUsers(usersData || []);
+      setCurrentUser(meData);
       setError(null);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Erro ao carregar catálogo');
+      setError(e instanceof Error ? e.message : 'Erro ao carregar dados');
+    } finally {
+      setLoading(false);
     }
-  }, []);
+  };
 
   useEffect(() => {
-    if (ready) load();
-  }, [ready, load]);
+    if (logged && !currentUser) {
+      load();
+    }
+  }, [logged, currentUser]);
 
-  if (!ready) {
-    return <TokenGate onReady={() => setReady(true)} />;
+  const logout = () => {
+    clearAdminToken();
+    setLogged(false);
+    setCurrentUser(null);
+    setItems([]);
+    setUsers([]);
+  };
+
+  if (!logged) {
+    return <LoginScreen onReady={() => setLogged(true)} />;
   }
 
   return (
     <div>
-      <h1>AuraSync — CMS</h1>
-      <p className="hint" style={{ marginBottom: 20 }}>
-        Curadoria de conteúdo com licenciamento obrigatório. Nenhum áudio publica
-        sem fonte, autor e licença registrados.
-      </p>
-      {error ? <p className="error">{error}</p> : null}
-      <ContentForm onCreated={load} />
-      <ContentTable items={items} onChange={load} />
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+        <div>
+          <h1>AuraSync — CMS</h1>
+          <p className="hint" style={{ marginBottom: 0 }}>
+            {currentUser ? `Conectado como ${currentUser.email}` : loading ? 'Carregando...' : 'Erro ao conectar'}
+          </p>
+        </div>
+        <button className="secondary" onClick={logout}>
+          Sair
+        </button>
+      </div>
+
+      <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
+        <button
+          onClick={() => setTab('content')}
+          style={{
+            background: tab === 'content' ? 'var(--primary)' : 'var(--surface-light)',
+            color: tab === 'content' ? 'var(--bg)' : 'var(--text)',
+          }}
+        >
+          Conteúdo ({items.length})
+        </button>
+        <button
+          onClick={() => setTab('users')}
+          style={{
+            background: tab === 'users' ? 'var(--primary)' : 'var(--surface-light)',
+            color: tab === 'users' ? 'var(--bg)' : 'var(--text)',
+          }}
+        >
+          Usuários ({users.length})
+        </button>
+      </div>
+
+      {error ? <p className="error" style={{ marginBottom: 16 }}>{error}</p> : null}
+
+      {tab === 'content' ? (
+        <>
+          <p className="hint" style={{ marginBottom: 20 }}>
+            Curadoria de conteúdo com licenciamento obrigatório. Nenhum áudio publica sem fonte, autor e
+            licença registrados.
+          </p>
+          <ContentForm onCreated={load} />
+          <ContentTable items={items} onChange={load} />
+        </>
+      ) : (
+        <UsersTable users={users} currentUserId={currentUser?.id} onChange={load} />
+      )}
     </div>
   );
 }

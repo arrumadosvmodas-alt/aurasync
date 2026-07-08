@@ -42,3 +42,23 @@ def auth_headers(client):
     assert resp.status_code == 201, resp.text
     token = resp.json()["access_token"]
     return {"Authorization": f"Bearer {token}"}
+
+
+@pytest.fixture
+def admin_headers(client, db):
+    from app.core.security import hash_password
+    from app.models import User
+
+    admin = User(
+        email="admin@aurasync.app",
+        password_hash=hash_password("admin12345"),
+        display_name="Admin",
+        role="admin",
+    )
+    db.add(admin)
+    db.commit()
+
+    resp = client.post("/auth/login", json={"email": "admin@aurasync.app", "password": "admin12345"})
+    assert resp.status_code == 200, resp.text
+    token = resp.json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}

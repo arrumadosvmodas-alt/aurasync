@@ -46,6 +46,8 @@ def login(body: LoginRequest, db: Session = Depends(get_db)):
     user = db.execute(select(User).where(User.email == body.email)).scalar_one_or_none()
     if user is None or not verify_password(body.password, user.password_hash):
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Credenciais inválidas")
+    if not user.is_active:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "Conta desativada")
     return TokenResponse(
         access_token=create_access_token(user.id),
         refresh_token=create_refresh_token(user.id),
@@ -55,7 +57,10 @@ def login(body: LoginRequest, db: Session = Depends(get_db)):
 @router.post("/refresh", response_model=TokenResponse)
 def refresh(body: RefreshRequest, db: Session = Depends(get_db)):
     user_id = decode_token(body.refresh_token, "refresh")
-    if user_id is None or db.get(User, user_id) is None:
+    if user_id is None:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Refresh token inválido")
+    user = db.get(User, user_id)
+    if user is None or not user.is_active:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Refresh token inválido")
     return TokenResponse(access_token=create_access_token(user_id))
 

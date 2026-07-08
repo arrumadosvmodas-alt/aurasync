@@ -390,6 +390,7 @@ def seed(reset: bool = False) -> None:
             email="demo@aurasync.app",
             password_hash=hash_password("aurasync123"),
             display_name="Visitante",
+            role="user",
         )
         db.add(demo)
         db.flush()
@@ -404,6 +405,17 @@ def seed(reset: bool = False) -> None:
             )
         )
 
+        # 8) Conta de administrador do CMS — senha via AURASYNC_SEED_ADMIN_PASSWORD
+        # em produção; nunca reutilize o valor padrão de dev fora do ambiente local.
+        admin_password = settings.seed_admin_password
+        admin = User(
+            email="admin@aurasync.app",
+            password_hash=hash_password(admin_password),
+            display_name="Administrador",
+            role="admin",
+        )
+        db.add(admin)
+
         db.commit()
         print("Seed concluído:")
         print(f"  {len(manifest)} sessões binaurais (áudio próprio)")
@@ -411,7 +423,13 @@ def seed(reset: bool = False) -> None:
         print(f"  {len(BREATHING_ITEMS)} práticas de respiração")
         print(f"  {len(JOURNEYS)} jornadas de 7 dias")
         print(f"  {len(PLAYLISTS)} playlists")
-        print("  usuário demo: demo@aurasync.app / aurasync123")
+        print("  usuário demo (app): demo@aurasync.app / aurasync123")
+        print(f"  administrador (CMS): admin@aurasync.app / {admin_password}")
+        if admin_password == "TrocarEssaSenha123!":
+            print(
+                "  AVISO: senha de admin padrão de desenvolvimento — defina "
+                "AURASYNC_SEED_ADMIN_PASSWORD antes de rodar em produção."
+            )
     finally:
         db.close()
 

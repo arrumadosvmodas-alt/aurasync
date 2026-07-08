@@ -1,7 +1,16 @@
 import uuid
 from datetime import datetime, timezone
 
-from sqlalchemy import JSON, Boolean, DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import (
+    JSON,
+    Boolean,
+    CheckConstraint,
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db import Base
@@ -17,11 +26,14 @@ def _now() -> datetime:
 
 class User(Base):
     __tablename__ = "users"
+    __table_args__ = (CheckConstraint("role IN ('user','admin')", name="ck_user_role"),)
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid)
     email: Mapped[str] = mapped_column(Text, unique=True, nullable=False, index=True)
     password_hash: Mapped[str] = mapped_column(Text, nullable=False)
     display_name: Mapped[str | None] = mapped_column(Text)
+    role: Mapped[str] = mapped_column(String(20), default="user", nullable=False)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now)
 
     preferences: Mapped["UserPreferences | None"] = relationship(

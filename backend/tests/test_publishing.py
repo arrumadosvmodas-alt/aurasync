@@ -47,11 +47,9 @@ def test_conteudo_sem_audio_bloqueia_exceto_respiracao(db):
     assert can_publish(db, respiracao)
 
 
-def test_endpoint_admin_bloqueia_publicacao_sem_licenca(client, db):
+def test_endpoint_admin_bloqueia_publicacao_sem_licenca(client, db, admin_headers):
     item = _content_with_audio(db, licensed=False)
     db.commit()
-    resp = client.post(
-        f"/admin/content/{item.id}/publish", headers={"X-Admin-Token": "dev-admin-token"}
-    )
+    resp = client.post(f"/admin/content/{item.id}/publish", headers=admin_headers)
     assert resp.status_code == 422
     assert "licenciamento" in resp.json()["detail"]
