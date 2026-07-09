@@ -62,7 +62,7 @@ REACT_APP_API_URL=https://aurasync-api.vercel.app
 REACT_APP_ENV=production
 AURASYNC_DATABASE_URL=postgresql://user:password@host/db
 AURASYNC_JWT_SECRET=<gerar com secrets.token_urlsafe(32)>
-AURASYNC_SEED_ADMIN_PASSWORD=aRhXba7dtUcTFgLMm-9WGcrIgPF5RZoDMMjcPLGi5b8
+AURASYNC_SEED_ADMIN_PASSWORD=<ADICIONAR_NO_VERCEL_SECRETS_APENAS>
 ```
 
 ### Passo 4: Deploy
@@ -83,7 +83,7 @@ API Docs:           https://aurasync-api.vercel.app/docs
 ```
 
 **Credenciais:**
-- Admin: `admin@aurasync.app` / `aRhXba7dtUcTFgLMm-9WGcrIgPF5RZoDMMjcPLGi5b8`
+- Admin: `admin@aurasync.app` / (senha definida em `AURASYNC_SEED_ADMIN_PASSWORD` no Vercel Secrets)
 - Demo: `demo@aurasync.app` / `aurasync123`
 
 ---
