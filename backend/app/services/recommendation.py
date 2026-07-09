@@ -14,8 +14,8 @@ from datetime import datetime, timezone
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from app.core.constants import GOAL_AXES, GOAL_MOODS, TIME_OF_DAY_AXES, time_of_day
-from app.models import ContentItem, ImageAsset, PlaybackHistory, UserPreferences
+from ..core.constants import GOAL_AXES, GOAL_MOODS, TIME_OF_DAY_AXES, time_of_day
+from ..models import ContentItem, ImageAsset, PlaybackHistory, UserPreferences
 
 # Paleta de cores priorizada por período do dia (correlação áudio × imagem).
 TIME_COLORS = {

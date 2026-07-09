@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 
 import jwt
 
-from app.core.config import settings
+from .config import settings
 
 _PBKDF2_ITERATIONS = 200_000
 

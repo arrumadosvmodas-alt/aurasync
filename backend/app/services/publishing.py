@@ -3,7 +3,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.models import AssetLicense, ContentItem
+from ..models import AssetLicense, ContentItem
 
 
 def missing_licenses(db: Session, content: ContentItem) -> list[str]:

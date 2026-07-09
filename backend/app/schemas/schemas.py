@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, EmailStr, Field
 
-from app.core.constants import CONTENT_TYPES, EXPERIENCE_LEVELS, GOALS
+from ..core.constants import CONTENT_TYPES, EXPERIENCE_LEVELS, GOALS
 
 
 # ---------- Auth ----------

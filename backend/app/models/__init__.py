@@ -1,5 +1,5 @@
-from app.models.user import User, UserPreferences, Favorite, PlaybackHistory
-from app.models.content import (
+from .user import User, UserPreferences, Favorite, PlaybackHistory
+from .content import (
     ContentItem,
     AudioAsset,
     ImageAsset,
@@ -8,7 +8,7 @@ from app.models.content import (
     Playlist,
     PlaylistItem,
 )
-from app.models.journey import SpiritualJourney, JourneyStep, UserJourneyProgress
+from .journey import SpiritualJourney, JourneyStep, UserJourneyProgress
 
 __all__ = [
     "User",
