@@ -1,6 +1,7 @@
-// Em dev web o backend roda na mesma máquina; para testar no Expo Go em um
-// celular, troque por http://<IP-da-sua-máquina-na-rede>:8000
-export const API_BASE = 'http://localhost:8000';
+// Ler URL da API via variável de ambiente EXPO_PUBLIC_API_URL
+// Default: http://localhost:8000 (dev local)
+// Produção: https://aurasync-api.vercel.app (ou URL do seu backend)
+export const API_BASE = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8000';
 
 export interface ImageAsset {
   id: string;

@@ -13,8 +13,8 @@ import { colors } from '../theme';
 
 export function LoginScreen() {
   const { login, register } = useApp();
-  const [email, setEmail] = useState('demo@aurasync.app');
-  const [password, setPassword] = useState('aurasync123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);

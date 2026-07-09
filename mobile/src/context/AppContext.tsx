@@ -85,10 +85,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const login = useCallback(
     async (loginEmail: string, password: string) => {
-      const resp = await api<{ access_token: string }>('/auth/login', {
-        method: 'POST',
-        body: { email: loginEmail, password },
-      });
+      const resp = await api<{ access_token: string; refresh_token?: string }>(
+        '/auth/login',
+        {
+          method: 'POST',
+          body: { email: loginEmail, password },
+        },
+      );
       await persist(resp.access_token, loginEmail);
     },
     [persist],
@@ -96,10 +99,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const register = useCallback(
     async (newEmail: string, password: string) => {
-      const resp = await api<{ access_token: string }>('/auth/register', {
-        method: 'POST',
-        body: { email: newEmail, password },
-      });
+      const resp = await api<{ access_token: string; refresh_token?: string }>(
+        '/auth/register',
+        {
+          method: 'POST',
+          body: { email: newEmail, password },
+        },
+      );
       await persist(resp.access_token, newEmail);
     },
     [persist],
