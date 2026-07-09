@@ -22,10 +22,12 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins.split(",") if settings.cors_origins != "*" else ["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+    allow_origins=[
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "https://aurasync-admin.vercel.app",
+    "https://aurasync-pi.vercel.app",
+],
 
 # Em dev criamos as tabelas direto; Alembic assume as migrações a partir daqui.
 # COMENTADO EM PRODUÇÃO: Vercel não permite create_all no startup
