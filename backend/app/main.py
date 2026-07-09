@@ -10,6 +10,7 @@ from .core.constants import (
     BINAURAL_SAFETY_TEXT,
 )
 from .db import Base, engine
+# Importações já estão em relative imports ✓
 
 app = FastAPI(
     title=settings.app_name,
@@ -27,10 +28,12 @@ app.add_middleware(
 )
 
 # Em dev criamos as tabelas direto; Alembic assume as migrações a partir daqui.
-Base.metadata.create_all(bind=engine)
+# COMENTADO EM PRODUÇÃO: Vercel não permite create_all no startup
+# Base.metadata.create_all(bind=engine)
 
-settings.storage_dir.mkdir(parents=True, exist_ok=True)
-app.mount("/media", StaticFiles(directory=settings.storage_dir), name="media")
+# Storage mounting (comentado em produção - Vercel não permite criação de diretórios)
+# settings.storage_dir.mkdir(parents=True, exist_ok=True)
+# app.mount("/media", StaticFiles(directory=settings.storage_dir), name="media")
 
 app.include_router(auth.router)
 app.include_router(catalog.router)
