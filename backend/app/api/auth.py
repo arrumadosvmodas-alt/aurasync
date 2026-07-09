@@ -2,17 +2,17 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user
-from app.core.security import (
+from .deps import get_current_user
+from ..core.security import (
     create_access_token,
     create_refresh_token,
     decode_token,
     hash_password,
     verify_password,
 )
-from app.db import get_db
-from app.models import User
-from app.schemas.schemas import (
+from ..db import get_db
+from ..models import User
+from ..schemas.schemas import (
     LoginRequest,
     RefreshRequest,
     RegisterRequest,

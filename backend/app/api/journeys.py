@@ -2,10 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user
-from app.db import get_db
-from app.models import SpiritualJourney, User, UserJourneyProgress
-from app.schemas.schemas import JourneyOut, JourneyProgressIn, JourneyProgressOut
+from .deps import get_current_user
+from ..db import get_db
+from ..models import SpiritualJourney, User, UserJourneyProgress
+from ..schemas.schemas import JourneyOut, JourneyProgressIn, JourneyProgressOut
 
 router = APIRouter(prefix="/journeys", tags=["journeys"])
 

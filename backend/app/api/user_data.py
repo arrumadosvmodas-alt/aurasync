@@ -4,11 +4,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user
-from app.api.serializers import serialize_content
-from app.db import get_db
-from app.models import ContentItem, Favorite, PlaybackHistory, User, UserPreferences
-from app.schemas.schemas import (
+from .deps import get_current_user
+from .serializers import serialize_content
+from ..db import get_db
+from ..models import ContentItem, Favorite, PlaybackHistory, User, UserPreferences
+from ..schemas.schemas import (
     ContentItemOut,
     FavoriteIn,
     HistoryIn,

@@ -6,11 +6,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.api.deps import require_admin_user
-from app.api.serializers import serialize_content
-from app.db import get_db
-from app.models import AssetLicense, AudioAsset, ContentItem, User
-from app.schemas.schemas import (
+from .deps import require_admin_user
+from .serializers import serialize_content
+from ..db import get_db
+from ..models import AssetLicense, AudioAsset, ContentItem, User
+from ..schemas.schemas import (
     AudioAssetIn,
     ContentItemIn,
     ContentItemOut,
@@ -19,7 +19,7 @@ from app.schemas.schemas import (
     UserAdminOut,
     UserPatch,
 )
-from app.services.publishing import missing_licenses
+from ..services.publishing import missing_licenses
 
 router = APIRouter(prefix="/admin", tags=["admin"], dependencies=[Depends(require_admin_user)])
 

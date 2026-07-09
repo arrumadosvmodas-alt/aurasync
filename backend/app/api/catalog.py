@@ -2,10 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.api.serializers import serialize_content, serialize_image
-from app.db import get_db
-from app.models import ContentItem, ImageAsset, Playlist
-from app.schemas.schemas import ContentItemOut, ImageAssetOut
+from .serializers import serialize_content, serialize_image
+from ..db import get_db
+from ..models import ContentItem, ImageAsset, Playlist
+from ..schemas.schemas import ContentItemOut, ImageAssetOut
 
 router = APIRouter(tags=["catalog"])
 

@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user
-from app.api.serializers import serialize_content, serialize_image
-from app.core.constants import GOALS
-from app.db import get_db
-from app.models import User, UserPreferences
-from app.schemas.schemas import RecommendationOut
-from app.services.recommendation import correlate_image, recommend
+from .deps import get_current_user
+from .serializers import serialize_content, serialize_image
+from ..core.constants import GOALS
+from ..db import get_db
+from ..models import User, UserPreferences
+from ..schemas.schemas import RecommendationOut
+from ..services.recommendation import correlate_image, recommend
 
 router = APIRouter(tags=["recommendations"])
 
