@@ -6,7 +6,12 @@ from .api import admin, auth, catalog, journeys, recommendations, user_data
 from .core.config import settings
 from .core.constants import (
 from .db import Base, engine
-
+app = FastAPI(
+    title=settings.app_name
+)
+app.include_router(user_data.router)
+app.include_router(recommendations.router)
+app.include_router(admin.router)
 app = FastAPI(
     title=settings.app_name,
     description=(
@@ -48,4 +53,5 @@ def meta():
         "spiritual_axes": SPIRITUAL_AXES,
         "disclaimer": DISCLAIMER_TEXT,
         "binaural_safety": BINAURAL_SAFETY_TEXT,
-    }
+   }
+
