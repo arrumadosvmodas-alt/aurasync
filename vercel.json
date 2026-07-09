@@ -1,0 +1,43 @@
+{
+  "version": 2,
+  "projects": [
+    {
+      "name": "aurasync-admin",
+      "rootDirectory": "admin",
+      "buildCommand": "npm run build",
+      "outputDirectory": "dist",
+      "env": {
+        "REACT_APP_API_URL": "@aurasync_api_url",
+        "REACT_APP_ENV": "production"
+      }
+    },
+    {
+      "name": "aurasync-mobile",
+      "rootDirectory": "mobile",
+      "buildCommand": "npm run build:web",
+      "outputDirectory": "web-build",
+      "env": {
+        "REACT_APP_API_URL": "@aurasync_api_url",
+        "REACT_APP_ENV": "production"
+      }
+    },
+    {
+      "name": "aurasync-api",
+      "rootDirectory": "backend",
+      "buildCommand": "pip install -r requirements.txt && alembic upgrade head",
+      "outputDirectory": ".",
+      "env": {
+        "AURASYNC_DATABASE_URL": "@database_url",
+        "AURASYNC_JWT_SECRET": "@jwt_secret",
+        "AURASYNC_STORAGE_DIR": "/tmp/aurasync",
+        "AURASYNC_SEED_ADMIN_PASSWORD": "@admin_password"
+      }
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/docs",
+      "destination": "https://aurasync-api.vercel.app/docs"
+    }
+  ]
+}
