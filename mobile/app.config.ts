@@ -1,13 +1,10 @@
-import { ExpoConfig, getDefaultConfig } from 'expo/config';
-
-const config = getDefaultConfig(__dirname);
+import { ExpoConfig } from 'expo/config';
 
 // Exposer variáveis de ambiente ao app via EXPO_PUBLIC_*
 // Leia via: process.env.EXPO_PUBLIC_API_URL
 const apiUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8000';
 
-export default {
-  ...config,
+const config: ExpoConfig = {
   name: 'AuraSync',
   slug: 'aurasync',
   version: '1.0.0',
@@ -38,4 +35,6 @@ export default {
     },
   },
   plugins: [],
-} as ExpoConfig;
+};
+
+export default config;
