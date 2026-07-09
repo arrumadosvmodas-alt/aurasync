@@ -2,14 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from app.api import admin, auth, catalog, journeys, recommendations, user_data
-from app.core.config import settings
-from app.core.constants import (
-    BINAURAL_SAFETY_TEXT,
-    DISCLAIMER_TEXT,
-    SPIRITUAL_AXES,
-)
-from app.db import Base, engine
+from .api import admin, auth, catalog, journeys, recommendations, user_data
+from .core.config import settings
+from .core.constants import (
+from .db import Base, engine
 
 app = FastAPI(
     title=settings.app_name,
