@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     storage_dir: Path = REPO_DIR / "storage"
     media_base_url: str = "/media"
     seed_admin_password: str = "TrocarEssaSenha123!"
+    cors_origins: str = "*"  # Dev: "*", Prod: "https://aurasync.vercel.app,https://admin.aurasync.vercel.app"
 
     model_config = SettingsConfigDict(
         env_prefix="AURASYNC_",
