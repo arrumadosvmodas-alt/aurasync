@@ -22,6 +22,8 @@ storage/images/*
 # Ambiente
 .env
 .env.local
+.env.production
+.env.staging
 
 # IDE / SO
 .vscode/
