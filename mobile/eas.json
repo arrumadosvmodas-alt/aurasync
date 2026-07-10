@@ -1,0 +1,46 @@
+{
+  "cli": {
+    "version": ">= 5.0.0",
+    "promptToConfigurePushNotifications": false
+  },
+  "build": {
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "@env EXPO_PUBLIC_API_URL"
+      },
+      "ios": {
+        "buildType": "simulator"
+      },
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "preview2": {
+      "distribution": "internal",
+      "ios": {
+        "buildType": "simulator"
+      }
+    },
+    "preview3": {
+      "distribution": "internal",
+      "ios": {
+        "buildType": "simulator"
+      }
+    },
+    "production": {
+      "env": {
+        "EXPO_PUBLIC_API_URL": "@env EXPO_PUBLIC_API_URL"
+      },
+      "ios": {
+        "buildType": "archive"
+      },
+      "android": {
+        "buildType": "app-bundle"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
