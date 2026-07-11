@@ -398,6 +398,7 @@ def seed(reset: bool = False) -> None:
             UserPreferences(
                 user_id=demo.id,
                 primary_goal="relaxation",
+                night_goal="sleep",
                 preferred_duration_seconds=1200,
                 preferred_content=["binaural", "breathing"],
                 spiritual_axis=["water", "ether"],

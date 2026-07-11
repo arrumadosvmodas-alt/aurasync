@@ -43,7 +43,12 @@ def score_content(
 ) -> tuple[float, list[str]]:
     period = time_of_day(hour)
     time_axes = TIME_OF_DAY_AXES[period]
-    goal = prefs.primary_goal if prefs else "relaxation"
+    
+    if period in ("evening", "night") and prefs and prefs.night_goal:
+        goal = prefs.night_goal
+    else:
+        goal = prefs.primary_goal if prefs else "relaxation"
+        
     user_axes = list(prefs.spiritual_axis) if prefs and prefs.spiritual_axis else GOAL_AXES.get(goal, [])
     goal_moods = GOAL_MOODS.get(goal, [])
 
@@ -103,6 +108,7 @@ def recommend(
         prefs = UserPreferences(
             user_id=prefs.user_id,
             primary_goal=goal_override,
+            night_goal=prefs.night_goal,
             preferred_duration_seconds=prefs.preferred_duration_seconds,
             preferred_content=prefs.preferred_content,
             spiritual_axis=prefs.spiritual_axis,

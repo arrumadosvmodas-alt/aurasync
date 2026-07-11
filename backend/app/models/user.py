@@ -50,6 +50,7 @@ class UserPreferences(Base):
         String(36), ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
     )
     primary_goal: Mapped[str] = mapped_column(String(20), default="relaxation")
+    night_goal: Mapped[str | None] = mapped_column(String(20), default="sleep", nullable=True)
     preferred_duration_seconds: Mapped[int] = mapped_column(Integer, default=600)
     preferred_content: Mapped[list] = mapped_column(JSON, default=list)
     spiritual_axis: Mapped[list] = mapped_column(JSON, default=list)

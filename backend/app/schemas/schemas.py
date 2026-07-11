@@ -63,6 +63,7 @@ class UserPatch(BaseModel):
 
 class OnboardingRequest(BaseModel):
     primary_goal: str = Field(default="relaxation")
+    night_goal: str | None = Field(default="sleep")
     preferred_duration_seconds: int = Field(default=600, ge=60, le=7200)
     preferred_content: list[str] = []
     spiritual_axis: list[str] = []
@@ -71,6 +72,8 @@ class OnboardingRequest(BaseModel):
     def validate_domain(self) -> "OnboardingRequest":
         if self.primary_goal not in GOALS:
             raise ValueError(f"primary_goal deve ser um de {GOALS}")
+        if self.night_goal is not None and self.night_goal not in GOALS:
+            raise ValueError(f"night_goal deve ser um de {GOALS}")
         if self.experience_level not in EXPERIENCE_LEVELS:
             raise ValueError(f"experience_level deve ser um de {EXPERIENCE_LEVELS}")
         return self
@@ -78,6 +81,7 @@ class OnboardingRequest(BaseModel):
 
 class PreferencesOut(BaseModel):
     primary_goal: str
+    night_goal: str | None
     preferred_duration_seconds: int
     preferred_content: list
     spiritual_axis: list

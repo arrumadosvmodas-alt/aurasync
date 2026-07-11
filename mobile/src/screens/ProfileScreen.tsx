@@ -16,7 +16,7 @@ const GOAL_LABELS: Record<string, string> = {
 };
 
 export function ProfileScreen() {
-  const { email, prefs, logout, token } = useApp();
+  const { email, prefs, logout, token, resetPrefs } = useApp();
   const [disclaimer, setDisclaimer] = useState('');
   const [historyCount, setHistoryCount] = useState<number | null>(null);
 
@@ -38,7 +38,10 @@ export function ProfileScreen() {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Suas preferências</Text>
           <Text style={styles.row}>
-            Objetivo: {GOAL_LABELS[prefs.primary_goal] ?? prefs.primary_goal}
+            Objetivo Diurno: {GOAL_LABELS[prefs.primary_goal] ?? prefs.primary_goal}
+          </Text>
+          <Text style={styles.row}>
+            Objetivo Noturno: {prefs.night_goal ? (GOAL_LABELS[prefs.night_goal] ?? prefs.night_goal) : '—'}
           </Text>
           <Text style={styles.row}>
             Duração ideal: {Math.round(prefs.preferred_duration_seconds / 60)} min
@@ -58,6 +61,10 @@ export function ProfileScreen() {
           <Text style={styles.row}>{historyCount} sessões recentes registradas</Text>
         </View>
       ) : null}
+
+      <Pressable style={styles.resetButton} onPress={resetPrefs}>
+        <Text style={styles.resetButtonText}>Alterar Objetivos</Text>
+      </Pressable>
 
       <Pressable style={styles.logout} onPress={logout}>
         <Text style={styles.logoutText}>Sair</Text>
@@ -89,5 +96,13 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   logoutText: { color: colors.danger, fontSize: 15, fontWeight: '600' },
+  resetButton: {
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    paddingVertical: 12,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  resetButtonText: { color: colors.primary, fontSize: 15, fontWeight: '600' },
   disclaimer: { color: colors.textDim, fontSize: 11, marginTop: 24, lineHeight: 16 },
 });

@@ -70,3 +70,21 @@ def update_progress(
     db.commit()
     db.refresh(progress)
     return progress
+
+
+@router.delete("/{journey_id}/progress")
+def reset_progress(
+    journey_id: str,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    progress = db.execute(
+        select(UserJourneyProgress).where(
+            UserJourneyProgress.user_id == user.id,
+            UserJourneyProgress.journey_id == journey_id,
+        )
+    ).scalar_one_or_none()
+    if progress:
+        db.delete(progress)
+        db.commit()
+    return {"ok": True}

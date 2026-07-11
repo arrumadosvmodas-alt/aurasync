@@ -59,6 +59,21 @@ export function JourneysScreen() {
     }
   };
 
+  const resetJourneyProgress = useCallback(
+    async (journey: Journey) => {
+      try {
+        await api(`/journeys/${journey.id}/progress`, {
+          method: 'DELETE',
+          token,
+        });
+        setProgress({ journey_id: journey.id, current_day: 1, completed_days: [] });
+      } catch {
+        // silêncio
+      }
+    },
+    [token],
+  );
+
   if (selected) {
     const completed = new Set(progress?.completed_days ?? []);
     return (
@@ -74,6 +89,10 @@ export function JourneysScreen() {
         {selected.objective ? (
           <Text style={styles.objective}>{selected.objective}</Text>
         ) : null}
+
+        <Pressable style={styles.resetJourney} onPress={() => resetJourneyProgress(selected)}>
+          <Text style={styles.resetJourneyText}>Reiniciar Jornada (Voltar ao Dia 1)</Text>
+        </Pressable>
 
         {selected.steps.map((step) => {
           const done = completed.has(step.day_number);
@@ -162,4 +181,15 @@ const styles = StyleSheet.create({
   stepTitle: { color: colors.text, fontSize: 15, fontWeight: '600' },
   stepPhrase: { color: colors.textDim, fontSize: 12, fontStyle: 'italic', marginTop: 2 },
   stepBreath: { color: colors.primary, fontSize: 11, marginTop: 2 },
+  resetJourney: {
+    backgroundColor: colors.surface,
+    borderColor: colors.surfaceLight,
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  resetJourneyText: { color: colors.danger, fontSize: 13, fontWeight: '600' },
 });

@@ -35,6 +35,7 @@ def save_onboarding(
         prefs = UserPreferences(user_id=user.id)
         db.add(prefs)
     prefs.primary_goal = body.primary_goal
+    prefs.night_goal = body.night_goal
     prefs.preferred_duration_seconds = body.preferred_duration_seconds
     prefs.preferred_content = body.preferred_content
     prefs.spiritual_axis = body.spiritual_axis

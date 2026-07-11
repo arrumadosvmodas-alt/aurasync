@@ -7,16 +7,26 @@ import { colors } from '../theme';
 const QUESTIONS = [
   {
     key: 'goal',
-    title: 'Qual seu objetivo principal?',
+    title: 'Qual seu objetivo para o dia?',
     multi: false,
     options: [
       { value: 'relaxation', label: 'Relaxar' },
-      { value: 'sleep', label: 'Dormir melhor' },
-      { value: 'meditation', label: 'Meditar' },
       { value: 'focus', label: 'Foco' },
+      { value: 'meditation', label: 'Meditar' },
       { value: 'spiritual', label: 'Elevação espiritual' },
       { value: 'breathing', label: 'Respiração' },
       { value: 'silence', label: 'Silêncio interior' },
+    ],
+  },
+  {
+    key: 'night_goal',
+    title: 'Qual seu objetivo para a noite?',
+    multi: false,
+    options: [
+      { value: 'sleep', label: 'Dormir melhor' },
+      { value: 'relaxation', label: 'Relaxar' },
+      { value: 'silence', label: 'Silêncio interior' },
+      { value: 'meditation', label: 'Meditar' },
     ],
   },
   {
@@ -94,6 +104,7 @@ export function OnboardingScreen() {
     try {
       await saveOnboarding({
         primary_goal: answers.goal?.[0] ?? 'relaxation',
+        night_goal: answers.night_goal?.[0] ?? 'sleep',
         preferred_duration_seconds: parseInt(answers.duration?.[0] ?? '600', 10),
         preferred_content: answers.content ?? [],
         spiritual_axis: answers.energy ?? [],

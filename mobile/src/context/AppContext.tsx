@@ -12,6 +12,7 @@ import { api, ContentItem } from '../api/client';
 
 export interface Preferences {
   primary_goal: string;
+  night_goal?: string;
   preferred_duration_seconds: number;
   preferred_content: string[];
   spiritual_axis: string[];
@@ -36,6 +37,7 @@ interface AppState {
   register: (email: string, password: string) => Promise<void>;
   logout: () => void;
   saveOnboarding: (prefs: Preferences) => Promise<void>;
+  resetPrefs: () => void;
   openPlayer: (session: PlayerSession) => void;
   closePlayer: () => void;
 }
@@ -131,6 +133,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     [token],
   );
 
+  const resetPrefs = useCallback(() => {
+    setPrefs(null);
+  }, []);
+
   const value = useMemo<AppState>(
     () => ({
       token,
@@ -142,10 +148,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       register,
       logout,
       saveOnboarding,
+      resetPrefs,
       openPlayer: setSession,
       closePlayer: () => setSession(null),
     }),
-    [token, email, prefs, loading, session, login, register, logout, saveOnboarding],
+    [token, email, prefs, loading, session, login, register, logout, saveOnboarding, resetPrefs],
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
