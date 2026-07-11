@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BACKEND_DIR = Path(__file__).resolve().parents[2]
@@ -17,6 +18,12 @@ class Settings(BaseSettings):
     media_base_url: str = "/media"
     seed_admin_password: str = "TrocarEssaSenha123!"
     cors_origins: str = "*"  # Dev: "*", Prod: "https://aurasync.vercel.app,https://admin.aurasync.vercel.app"
+
+    @model_validator(mode="after")
+    def fix_postgres_url(self) -> "Settings":
+        if self.database_url.startswith("postgres://"):
+            self.database_url = self.database_url.replace("postgres://", "postgresql://", 1)
+        return self
 
     model_config = SettingsConfigDict(
         env_prefix="AURASYNC_",

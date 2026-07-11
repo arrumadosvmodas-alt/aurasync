@@ -2,15 +2,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from .api import admin, auth, catalog, journeys, recommendations, user_data
-from .core.config import settings
-from .core.constants import (
+from app.api import admin, auth, catalog, journeys, recommendations, user_data
+from app.core.config import settings
+from app.core.constants import (
     SPIRITUAL_AXES,
     DISCLAIMER_TEXT,
     BINAURAL_SAFETY_TEXT,
 )
-from .db import Base, engine
-# Importações já estão em relative imports ✓
+from app.db import Base, engine
 
 app = FastAPI(
     title=settings.app_name,
@@ -39,9 +38,14 @@ app.add_middleware(
 # COMENTADO EM PRODUÇÃO: Vercel não permite create_all no startup
 # Base.metadata.create_all(bind=engine)
 
-# Storage mounting (comentado em produção - Vercel não permite criação de diretórios)
-# settings.storage_dir.mkdir(parents=True, exist_ok=True)
-# app.mount("/media", StaticFiles(directory=settings.storage_dir), name="media")
+# Storage mounting (permitido apenas fora do Vercel, ex: local ou Railway)
+import os
+if os.environ.get("VERCEL") != "1":
+    try:
+        settings.storage_dir.mkdir(parents=True, exist_ok=True)
+        app.mount("/media", StaticFiles(directory=settings.storage_dir), name="media")
+    except Exception as e:
+        print(f"Aviso: Não foi possível montar o diretório de mídia: {e}")
 
 app.include_router(auth.router)
 app.include_router(catalog.router)
