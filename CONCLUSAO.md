@@ -27,12 +27,12 @@
 ```
 App Demo:
   Email: demo@aurasync.app
-  Senha: aurasync123
+  Senha: 16Ta15Ti@
   Papel: user
 
 CMS Admin:
   Email: admin@aurasync.app
-  Senha: TrocarEssaSenha123!
+  Senha: 16Ta15Ti@
   Papel: admin
 ```
 
@@ -293,7 +293,7 @@ cd backend && python -m seeds.seed --reset
 # Fazer login novamente para obter novo token
 curl -X POST http://localhost:8000/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@aurasync.app","password":"TrocarEssaSenha123!"}'
+  -d '{"email":"admin@aurasync.app","password":"16Ta15Ti@"}'
 ```
 
 ---

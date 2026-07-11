@@ -32,7 +32,7 @@ curl http://localhost:8000/health
 ```bash
 curl -X POST http://localhost:8000/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@aurasync.app","password":"TrocarEssaSenha123!"}'
+  -d '{"email":"admin@aurasync.app","password":"16Ta15Ti@"}'
 ```
 
 **Esperado:**
@@ -87,7 +87,7 @@ curl -X PATCH http://localhost:8000/admin/users/{ID_DO_DEMO} \
 ```bash
 curl -X POST http://localhost:8000/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"demo@aurasync.app","password":"aurasync123"}'
+  -d '{"email":"demo@aurasync.app","password":"16Ta15Ti@"}'
 ```
 
 **Esperado:** 403 Forbidden — "Conta desativada"
@@ -103,7 +103,7 @@ curl -X POST http://localhost:8000/auth/login \
 - Botão "Entrar"
 
 ### 2.2 Fazer login
-- Preencher Senha: `TrocarEssaSenha123!`
+- Preencher Senha: `16Ta15Ti@`
 - Clicar "Entrar"
 - **Esperado:** Redirecionar para CMS com aba "Conteúdo" ativa
 

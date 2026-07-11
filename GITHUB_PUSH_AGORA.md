@@ -84,7 +84,7 @@ API Docs:           https://aurasync-api.vercel.app/docs
 
 **Credenciais:**
 - Admin: `admin@aurasync.app` / (senha definida em `AURASYNC_SEED_ADMIN_PASSWORD` no Vercel Secrets)
-- Demo: `demo@aurasync.app` / `aurasync123`
+- Demo: `demo@aurasync.app` / `16Ta15Ti@`
 
 ---
 

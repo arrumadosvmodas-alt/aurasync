@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     refresh_token_days: int = 30
     storage_dir: Path = REPO_DIR / "storage"
     media_base_url: str = "/media"
-    seed_admin_password: str = "TrocarEssaSenha123!"
+    seed_admin_password: str = "16Ta15Ti@"
     cors_origins: str = "*"  # Dev: "*", Prod: "https://aurasync.vercel.app,https://admin.aurasync.vercel.app"
 
     @model_validator(mode="after")
