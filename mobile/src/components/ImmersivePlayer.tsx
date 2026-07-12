@@ -46,6 +46,10 @@ export function ImmersivePlayer() {
 
   const item = session?.item;
   const resolvedAudioUrl = audioUrl(item);
+  const currentAudio = item?.audio?.[0];
+  const shouldLoopAudio = Boolean(
+    currentAudio?.is_loopable && (item?.type === 'soundscape' || item?.type === 'binaural'),
+  );
 
   // Audio setup
   useEffect(() => {
@@ -59,7 +63,7 @@ export function ImmersivePlayer() {
         await Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
         const { sound } = await Audio.Sound.createAsync(
           { uri: resolvedAudioUrl },
-          { isLooping: item.audio[0]?.is_loopable ?? true, shouldPlay: true },
+          { isLooping: shouldLoopAudio, shouldPlay: true },
           (status: AVPlaybackStatus) => {
             if (status.isLoaded) setPlaying(status.isPlaying);
           },
@@ -88,7 +92,7 @@ export function ImmersivePlayer() {
       soundRef.current?.unloadAsync();
       soundRef.current = null;
     };
-  }, [item, resolvedAudioUrl, token]);
+  }, [item, resolvedAudioUrl, shouldLoopAudio, token]);
 
   // Breathing circle animation cycle (Inhale 4s -> Hold In 4s -> Exhale 4s -> Hold Out 4s)
   useEffect(() => {
@@ -321,7 +325,7 @@ export function ImmersivePlayer() {
           )}
         </Pressable>
 
-        <Text style={styles.audioLoopLabel}>ÁUDIO EM LOOP CONTÍNUO</Text>
+        <Text style={styles.audioLoopLabel}>{shouldLoopAudio ? 'ÁUDIO EM LOOP CONTÍNUO' : 'REPRODUÇÃO ÚNICA'}</Text>
       </View>
     </View>
   );
