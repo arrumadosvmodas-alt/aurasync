@@ -34,7 +34,9 @@ const config: ExpoConfig = {
       projectId: 'aurasync',
     },
   },
-  plugins: [],
+  plugins: [
+    'expo-font',
+  ],
 };
 
 export default config;

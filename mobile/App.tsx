@@ -1,3 +1,11 @@
+import {
+  PlusJakartaSans_400Regular,
+  PlusJakartaSans_500Medium,
+  PlusJakartaSans_600SemiBold,
+  PlusJakartaSans_700Bold,
+  useFonts,
+} from '@expo-google-fonts/plus-jakarta-sans';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar } from 'expo-status-bar';
@@ -13,28 +21,45 @@ import { LoginScreen } from './src/screens/LoginScreen';
 import { MeditateScreen } from './src/screens/MeditateScreen';
 import { OnboardingScreen } from './src/screens/OnboardingScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
-import { colors } from './src/theme';
+import { colors, glass, rounded, TAB_ICONS, typography } from './src/theme';
 
 const Tab = createBottomTabNavigator();
-
-const TAB_ICONS: Record<string, string> = {
-  Início: '☀',
-  Explorar: '♫',
-  Meditar: '☯',
-  Jornadas: '➤',
-  Perfil: '●',
-};
 
 function Tabs() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarStyle: { backgroundColor: colors.surface, borderTopColor: colors.surfaceLight },
+        tabBarStyle: {
+          backgroundColor: colors.surface,
+          borderTopColor: glass.borderColor,
+          borderTopWidth: glass.borderWidth,
+          paddingBottom: 8,
+          paddingTop: 8,
+          height: 64,
+        },
         tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.textDim,
-        tabBarIcon: ({ color }) => (
-          <Text style={{ color, fontSize: 16 }}>{TAB_ICONS[route.name] ?? '·'}</Text>
+        tabBarInactiveTintColor: colors.onSurfaceVariant,
+        tabBarLabelStyle: {
+          fontFamily: typography.labelSm.fontFamily,
+          fontSize: typography.labelSm.fontSize,
+          fontWeight: typography.labelSm.fontWeight,
+          letterSpacing: 0.3,
+        },
+        tabBarIcon: ({ color, size, focused }) => (
+          <View
+            style={{
+              backgroundColor: focused ? colors.primaryContainer : 'transparent',
+              borderRadius: rounded.full,
+              padding: 6,
+            }}
+          >
+            <MaterialCommunityIcons
+              name={TAB_ICONS[route.name] as keyof typeof MaterialCommunityIcons.glyphMap}
+              size={size - 4}
+              color={color}
+            />
+          </View>
         ),
       })}
     >
@@ -72,7 +97,7 @@ function Root() {
               ...DarkTheme.colors,
               background: colors.background,
               card: colors.surface,
-              text: colors.text,
+              text: colors.onSurface,
               primary: colors.primary,
             },
           }}
@@ -87,6 +112,21 @@ function Root() {
 }
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    PlusJakartaSans_400Regular,
+    PlusJakartaSans_500Medium,
+    PlusJakartaSans_600SemiBold,
+    PlusJakartaSans_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return (
+      <View style={{ flex: 1, backgroundColor: colors.background, justifyContent: 'center' }}>
+        <ActivityIndicator color={colors.primary} size="large" />
+      </View>
+    );
+  }
+
   return (
     <AppProvider>
       <Root />

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AuraSync - Início</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#3f0689",
+                        "surface-variant": "#2d3449",
+                        "on-secondary-fixed": "#251a00",
+                        "on-secondary": "#3f2e00",
+                        "surface-container-low": "#131b2e",
+                        "on-error": "#690005",
+                        "outline-variant": "#4a4452",
+                        "inverse-on-surface": "#283044",
+                        "inverse-primary": "#6f46b9",
+                        "tertiary": "#89ceff",
+                        "surface-tint": "#d3bbff",
+                        "secondary-fixed-dim": "#f7be1d",
+                        "on-tertiary-fixed": "#001e2f",
+                        "surface": "#0b1326",
+                        "surface-container-lowest": "#060e20",
+                        "secondary": "#ffca45",
+                        "on-primary-container": "#b994ff",
+                        "on-primary-fixed-variant": "#572ba0",
+                        "on-tertiary-fixed-variant": "#004c6e",
+                        "primary-fixed-dim": "#d3bbff",
+                        "tertiary-fixed-dim": "#89ceff",
+                        "on-surface-variant": "#ccc3d4",
+                        "surface-container-high": "#222a3d",
+                        "primary": "#d3bbff",
+                        "outline": "#958e9e",
+                        "on-tertiary-container": "#2eb1f6",
+                        "on-primary-fixed": "#260059",
+                        "surface-dim": "#0b1326",
+                        "on-secondary-fixed-variant": "#5a4300",
+                        "surface-container": "#171f33",
+                        "inverse-surface": "#dae2fd",
+                        "tertiary-container": "#00415f",
+                        "on-error-container": "#ffdad6",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed": "#c9e6ff",
+                        "on-background": "#dae2fd",
+                        "on-secondary-container": "#5b4400",
+                        "on-tertiary": "#00344d",
+                        "primary-fixed": "#ebdcff",
+                        "secondary-container": "#e4ae00",
+                        "surface-container-highest": "#2d3449",
+                        "error-container": "#93000a",
+                        "secondary-fixed": "#ffdf9a",
+                        "background": "#0b1326",
+                        "primary-container": "#4c1d95",
+                        "surface-bright": "#31394d",
+                        "on-surface": "#dae2fd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "margin-desktop": "64px",
+                        "lg": "48px",
+                        "sm": "12px",
+                        "xl": "80px",
+                        "margin-mobile": "16px",
+                        "md": "24px",
+                        "base": "8px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "headline-lg": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["30px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0b1326;
+            color: #dae2fd;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            border: 0.5px solid rgba(211, 187, 255, 0.1);
+        }
+        .breath-pulse {
+            animation: breathe 8s ease-in-out infinite;
+        }
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.6; }
+        }
+        .main-gradient-bg {
+            background: radial-gradient(circle at top right, rgba(76, 29, 149, 0.2), transparent),
+                        radial-gradient(circle at bottom left, rgba(11, 19, 38, 1), transparent);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md main-gradient-bg pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/60 backdrop-blur-md flex justify-between items-center px-margin-mobile h-16 border-b border-primary/5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-headline-md" style="font-variation-settings: 'FILL' 1;">spa</span>
+<h1 class="text-headline-md font-headline-md font-bold text-primary tracking-tight">AuraSync</h1>
+</div>
+<button class="material-symbols-outlined text-primary hover:opacity-80 transition-opacity p-2 rounded-full hover:bg-primary/10">
+            notifications
+        </button>
+</header>
+<main class="mt-20 px-margin-mobile md:px-margin-desktop max-w-5xl mx-auto space-y-8">
+<!-- Welcome Section -->
+<section class="space-y-1">
+<p class="text-on-surface-variant font-label-md text-label-md">Bom dia, Gabriel</p>
+<h2 class="text-headline-lg-mobile font-headline-lg-mobile text-on-surface">Encontre sua paz interior hoje</h2>
+</section>
+<!-- Recommended Hero Card -->
+<section class="relative group cursor-pointer overflow-hidden rounded-2xl aspect-[16/9] md:aspect-[21/9] shadow-2xl">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCq4sIdLMyzMhcAj4mCY-a__J7UfdHUAGrAY-Q2BN3fjGV2aWfh1D7iVTqTm8j5qNjcoBdQhOvSH65BXwdnsdAdx7YuLs9uBrfMw76vUIB_ve8xHqaxPNs1BilTi0ndzNIQK6RvJuQbSGtuVq-XBuLn1_kiOr4lciepqVgAoJ07NXRHrtdvbH8C9TuCJpvYH-ZSsEqQusvYMaGvHRWKq7gXmZHtwcyX116zG7ril1gb18ukiHN4omrpnb6tE1RPqLnbhzt6VfBU91NP')">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6 md:p-10 space-y-2">
+<span class="px-3 py-1 glass-card rounded-full text-label-sm font-label-sm text-primary uppercase tracking-wider">Recomendado agora</span>
+<h3 class="text-headline-md font-headline-md text-on-surface">Respiração da Manhã Profunda</h3>
+<p class="text-on-surface-variant text-body-md max-w-md">Uma jornada de 10 minutos para alinhar sua energia e focar sua mente para os desafios do dia.</p>
+<div class="flex items-center gap-4 pt-2">
+<button class="bg-primary-container text-primary px-6 py-2 rounded-full font-label-md text-label-md flex items-center gap-2 transition-transform active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                        Começar Agora
+                    </button>
+<span class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">schedule</span> 10 min
+                    </span>
+</div>
+</div>
+<!-- Decorative Breath Indicator -->
+<div class="absolute top-6 right-6 w-12 h-12 rounded-full border border-primary/30 breath-pulse"></div>
+</section>
+<!-- Quick Access Bento Grid -->
+<section class="space-y-4">
+<h4 class="text-label-md font-label-md text-on-surface-variant uppercase tracking-widest">Acessos Rápidos</h4>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="glass-card p-6 rounded-2xl flex flex-col items-center gap-3 transition-all hover:border-primary/40 group">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="nature">nature</span>
+</div>
+<span class="text-label-md font-label-md text-on-surface">Sons da Natureza</span>
+</div>
+<div class="glass-card p-6 rounded-2xl flex flex-col items-center gap-3 transition-all hover:border-primary/40 group">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="graphic_eq">graphic_eq</span>
+</div>
+<span class="text-label-md font-label-md text-on-surface">Binaural</span>
+</div>
+<div class="glass-card p-6 rounded-2xl flex flex-col items-center gap-3 transition-all hover:border-primary/40 group">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="air">air</span>
+</div>
+<span class="text-label-md font-label-md text-on-surface">Respiração</span>
+</div>
+<div class="glass-card p-6 rounded-2xl flex flex-col items-center gap-3 transition-all hover:border-primary/40 group">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="self_improvement">self_improvement</span>
+</div>
+<span class="text-label-md font-label-md text-on-surface">Meditação</span>
+</div>
+</div>
+</section>
+<!-- Recent Activities / Short Sessions -->
+<section class="space-y-4 pb-12">
+<div class="flex justify-between items-center">
+<h4 class="text-label-md font-label-md text-on-surface-variant uppercase tracking-widest">Sessões Curtas</h4>
+<button class="text-primary text-label-sm font-label-sm hover:underline">Ver todas</button>
+</div>
+<div class="space-y-3">
+<!-- Session Item 1 -->
+<div class="flex items-center justify-between p-4 glass-card rounded-xl hover:bg-surface-variant/20 transition-colors group">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" data-icon="bolt">bolt</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Foco Instantâneo</p>
+<p class="text-label-sm text-on-surface-variant">Exercício rápido de concentração</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-label-sm font-label-sm text-on-surface-variant">5 min</span>
+<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</div>
+</div>
+<!-- Session Item 2 -->
+<div class="flex items-center justify-between p-4 glass-card rounded-xl hover:bg-surface-variant/20 transition-colors group">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary" data-icon="bedtime">bedtime</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Descompressão Pós-Trabalho</p>
+<p class="text-label-sm text-on-surface-variant">Redução de estresse acumulado</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-label-sm font-label-sm text-on-surface-variant">12 min</span>
+<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</div>
+</div>
+<!-- Session Item 3 -->
+<div class="flex items-center justify-between p-4 glass-card rounded-xl hover:bg-surface-variant/20 transition-colors group">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="favorite">favorite</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Auto-compaixão Guiada</p>
+<p class="text-label-sm text-on-surface-variant">Equilíbrio emocional</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-label-sm font-label-sm text-on-surface-variant">8 min</span>
+<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-t border-primary/10 shadow-[0_-4px_20px_rgba(76,29,149,0.15)] rounded-t-xl">
+<button class="flex flex-col items-center justify-center text-primary dark:text-primary transition-colors duration-200 scale-95 active:scale-90">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-label-sm font-label-sm">Início</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant/60 dark:text-on-surface-variant/60 hover:text-primary/80 transition-colors duration-200">
+<span class="material-symbols-outlined">search</span>
+<span class="text-label-sm font-label-sm">Explorar</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant/60 dark:text-on-surface-variant/60 hover:text-primary/80 transition-colors duration-200">
+<span class="material-symbols-outlined">self_improvement</span>
+<span class="text-label-sm font-label-sm">Meditar</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant/60 dark:text-on-surface-variant/60 hover:text-primary/80 transition-colors duration-200">
+<span class="material-symbols-outlined">map</span>
+<span class="text-label-sm font-label-sm">Jornadas</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant/60 dark:text-on-surface-variant/60 hover:text-primary/80 transition-colors duration-200">
+<span class="material-symbols-outlined">person</span>
+<span class="text-label-sm font-label-sm">Perfil</span>
+</button>
+</nav>
+<script>
+        // Micro-interactions and subtle effects
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body></html>
