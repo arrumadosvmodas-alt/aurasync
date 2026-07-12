@@ -87,43 +87,43 @@ IMAGES = [
 
 MEDITATION_ITEMS = [
     ("Meditação Zen da Manhã", "Comece seu dia com calma e presença plena.",
-     ["air", "light"], ["calm", "focused"], 600),
+     ["air", "light"], ["calm", "focused"], 600, "meditacao_zen_manha.wav"),
     ("Meditação Guiada: Enraizamento", "Conecte-se à terra e estabilize sua energia.",
-     ["earth", "root"], ["grounded", "calm"], 900),
+     ["earth", "root"], ["grounded", "calm"], 900, "meditacao_enraizamento.wav"),
     ("Meditação do Silêncio Interior", "Mergulhe na profundidade do seu ser.",
-     ["ether", "night"], ["deep", "contemplative"], 1200),
+     ["ether", "night"], ["deep", "contemplative"], 1200, "meditacao_silencio.wav"),
     ("Meditação Vipassana: Observação", "Desenvolva clareza mental observando os pensamentos sem julgamento.",
-     ["ether", "air"], ["clear", "focused"], 1500),
+     ["ether", "air"], ["clear", "focused"], 1500, "meditacao_vipassana.wav"),
     ("Meditação Metta: Compaixão Infinita", "Cultive amor incondicional por si mesmo e pelos outros.",
-     ["heart", "light"], ["warm", "loving"], 900),
+     ["heart", "light"], ["warm", "loving"], 900, "meditacao_metta.wav"),
     ("Meditação Body Scan Profundo", "Percorra cada parte do seu corpo com consciência plena.",
-     ["earth", "root"], ["grounded", "calm"], 1200),
+     ["earth", "root"], ["grounded", "calm"], 1200, "meditacao_body_scan.wav"),
 ]
 
 SOUNDSCAPE_ITEMS = [
     ("Sons da Floresta Tropical", "Ambientes naturais com pássaros e água.",
-     ["water", "earth"], ["calm", "airy"], 1800),
+     ["water", "earth"], ["calm", "airy"], 1800, "floresta_tropical.wav"),
     ("Chuva Relaxante", "Som meditativo de chuva para descanso.",
-     ["water", "night"], ["calm", "dark"], 1800),
+     ["water", "night"], ["calm", "dark"], 1800, "chuva_relaxante.wav"),
     ("Oceano ao Amanhecer", "Ondas suaves e sons costeiros inspiradores.",
-     ["water", "light"], ["calm", "luminous"], 1800),
+     ["water", "light"], ["calm", "luminous"], 1800, "oceano_amanhecer.wav"),
     ("Floresta de Pinheiros à Noite", "Ambiente florestal profundo com sons noturnos subtis.",
-     ["earth", "night"], ["deep", "dark"], 1800),
+     ["earth", "night"], ["deep", "dark"], 1800, "floresta_pinheiros.wav"),
     ("Ribeirão Cristalino", "Água corrente pura com pássaros ao fundo.",
-     ["water", "root"], ["gentle", "airy"], 1800),
+     ["water", "root"], ["gentle", "airy"], 1800, "ribeirao_cristalino.wav"),
     ("Tempestade Distante", "Sons de trovão e chuva para meditação profunda.",
-     ["water", "ether"], ["calm", "contemplative"], 2400),
+     ["water", "ether"], ["calm", "contemplative"], 2400, "tempestade_distante.wav"),
 ]
 
 MUSIC_ITEMS = [
     ("Harmonia Celestial", "Música ambiente minimalista com tons puros.",
-     ["ether", "light"], ["luminous", "sacred"], 900),
+     ["ether", "light"], ["luminous", "sacred"], 900, "harmonia_celestial.wav"),
     ("Acordes da Cura", "Frequências de relaxamento profundo e regeneração.",
-     ["heart", "light"], ["warm", "healing"], 1200),
+     ["heart", "light"], ["warm", "healing"], 1200, "acordes_cura.wav"),
     ("Piano Meditativo", "Composição delicada para contemplação e paz.",
-     ["heart", "ether"], ["calm", "gentle"], 1500),
+     ["heart", "ether"], ["calm", "gentle"], 1500, "piano_meditativo.wav"),
     ("Cristais Cantadores", "Sonic landscape experimental para expansão de consciência.",
-     ["ether", "fire"], ["vast", "luminous"], 1800),
+     ["ether", "fire"], ["vast", "luminous"], 1800, "cristais_cantadores.wav"),
 ]
 
 BREATHING_ITEMS = [
@@ -383,7 +383,7 @@ def seed(reset: bool = False) -> None:
             content_by_title[item.title] = item
 
         # 4) Meditações guiadas.
-        for title, desc, axes, moods, duration in MEDITATION_ITEMS:
+        for title, desc, axes, moods, duration, audio_file in MEDITATION_ITEMS:
             item = ContentItem(
                 title=title,
                 description=desc,
@@ -398,18 +398,19 @@ def seed(reset: bool = False) -> None:
             db.flush()
             audio = AudioAsset(
                 content_item_id=item.id,
-                storage_path=f"audio/{manifest[0]['file']}",
+                storage_path=f"audio/{audio_file}",
                 format="wav",
                 sample_rate=44100,
                 channels=2,
-                is_loopable=True,
+                is_loopable=item.type == "soundscape",
             )
             db.add(audio)
             db.flush()
+            _add_license(db, "audio", audio.id)
             content_by_title[title] = item
 
         # 5) Sons da natureza (soundscapes).
-        for title, desc, axes, moods, duration in SOUNDSCAPE_ITEMS:
+        for title, desc, axes, moods, duration, audio_file in SOUNDSCAPE_ITEMS:
             item = ContentItem(
                 title=title,
                 description=desc,
@@ -424,18 +425,19 @@ def seed(reset: bool = False) -> None:
             db.flush()
             audio = AudioAsset(
                 content_item_id=item.id,
-                storage_path=f"audio/{manifest[0]['file']}",
+                storage_path=f"audio/{audio_file}",
                 format="wav",
                 sample_rate=44100,
                 channels=2,
-                is_loopable=True,
+                is_loopable=item.type == "soundscape",
             )
             db.add(audio)
             db.flush()
+            _add_license(db, "audio", audio.id)
             content_by_title[title] = item
 
         # 6) Música ambiente e harmonia.
-        for title, desc, axes, moods, duration in MUSIC_ITEMS:
+        for title, desc, axes, moods, duration, audio_file in MUSIC_ITEMS:
             item = ContentItem(
                 title=title,
                 description=desc,
@@ -450,14 +452,15 @@ def seed(reset: bool = False) -> None:
             db.flush()
             audio = AudioAsset(
                 content_item_id=item.id,
-                storage_path=f"audio/{manifest[0]['file']}",
+                storage_path=f"audio/{audio_file}",
                 format="wav",
                 sample_rate=44100,
                 channels=2,
-                is_loopable=True,
+                is_loopable=item.type == "soundscape",
             )
             db.add(audio)
             db.flush()
+            _add_license(db, "audio", audio.id)
             content_by_title[title] = item
 
         # 7) Práticas de respiração (visuais, sem áudio).
