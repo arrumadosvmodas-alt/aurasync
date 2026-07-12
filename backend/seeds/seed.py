@@ -50,27 +50,57 @@ OWN_LICENSE = dict(
 )
 
 # Imagens contemplativas próprias, geradas como SVG (gradientes simbólicos).
+# `external_url` é usado como fallback quando o backend está offline ou
+# quando o cliente não suporta SVG (ex: React Native).
 IMAGES = [
     ("lago_sob_neblina", "Lago sob Neblina", ["water", "ether"], ["calm", "deep"],
-     ["dark_blue", "gray", "silver"], ["lake", "mist", "night"], "#0b1d33", "#40546b"),
+     ["dark_blue", "gray", "silver"], ["lake", "mist", "night"], "#0b1d33", "#40546b",
+     "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=400&auto=format&fit=crop"),
     ("montanha_ao_amanhecer", "Montanha ao Amanhecer", ["earth", "light"], ["sacred", "vast"],
-     ["gold", "blue", "green"], ["mountain", "sunrise"], "#1b2a49", "#e0a458"),
+     ["gold", "blue", "green"], ["mountain", "sunrise"], "#1b2a49", "#e0a458",
+     "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=400&auto=format&fit=crop"),
     ("ceu_estrelado", "Céu Estrelado", ["ether", "sky"], ["vast", "contemplative"],
-     ["dark_blue", "black", "silver"], ["stars", "cosmos", "night"], "#050510", "#1d2951"),
+     ["dark_blue", "black", "silver"], ["stars", "cosmos", "night"], "#050510", "#1d2951",
+     "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=400&auto=format&fit=crop"),
     ("floresta_azul", "Floresta Azul Escura", ["water", "earth"], ["calm", "dark"],
-     ["dark_blue", "green"], ["forest", "night", "rain"], "#04141f", "#123c33"),
+     ["dark_blue", "green"], ["forest", "night", "rain"], "#04141f", "#123c33",
+     "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=400&auto=format&fit=crop"),
     ("chama_da_vela", "Chama da Vela", ["fire", "heart"], ["warm", "sacred"],
-     ["orange", "gold", "black"], ["candle", "flame"], "#1a0d05", "#d97b29"),
+     ["orange", "gold", "black"], ["candle", "flame"], "#1a0d05", "#d97b29",
+     "https://images.unsplash.com/photo-1477414348463-c0eb7f1359b6?q=80&w=400&auto=format&fit=crop"),
     ("rio_entre_pedras", "Rio entre Pedras", ["water", "root"], ["gentle", "grounded"],
-     ["blue", "gray", "green"], ["river", "stones"], "#22333b", "#5e8c87"),
+     ["blue", "gray", "green"], ["river", "stones"], "#22333b", "#5e8c87",
+     "https://images.unsplash.com/photo-1437482078695-73f5ca6c96e3?q=80&w=400&auto=format&fit=crop"),
     ("ceu_aberto", "Céu Aberto", ["air", "sky"], ["airy", "luminous"],
-     ["blue", "white"], ["sky", "clouds", "wind"], "#7fb4d9", "#e8f1f8"),
+     ["blue", "white"], ["sky", "clouds", "wind"], "#7fb4d9", "#e8f1f8",
+     "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=400&auto=format&fit=crop"),
     ("aurora_dourada", "Aurora Dourada", ["light", "heart"], ["luminous", "warm"],
-     ["gold", "orange", "purple"], ["aurora", "dawn", "gratitude"], "#2b1b3d", "#f2b263"),
+     ["gold", "orange", "purple"], ["aurora", "dawn", "gratitude"], "#2b1b3d", "#f2b263",
+     "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?q=80&w=400&auto=format&fit=crop"),
     ("caverna_do_silencio", "Caverna do Silêncio", ["ether", "night"], ["deep", "dark"],
-     ["black", "purple", "dark_blue"], ["cave", "silence"], "#0a0a12", "#2e2440"),
+     ["black", "purple", "dark_blue"], ["cave", "silence"], "#0a0a12", "#2e2440",
+     "https://images.unsplash.com/photo-1444858291040-58f756a3bdd6?q=80&w=400&auto=format&fit=crop"),
     ("oceano_calmo", "Oceano Calmo à Noite", ["water", "night"], ["calm", "deep", "dark"],
-     ["dark_blue", "silver"], ["ocean", "moon", "night"], "#081826", "#2c4a63"),
+     ["dark_blue", "silver"], ["ocean", "moon", "night"], "#081826", "#2c4a63",
+     "https://images.unsplash.com/photo-1505118380757-91f5f5632de0?q=80&w=400&auto=format&fit=crop"),
+]
+
+MEDITATION_ITEMS = [
+    ("Meditação Zen da Manhã", "Comece seu dia com calma e presença plena.",
+     ["air", "light"], ["calm", "focused"], 600),
+    ("Meditação Guiada: Enraizamento", "Conecte-se à terra e estabilize sua energia.",
+     ["earth", "root"], ["grounded", "calm"], 900),
+    ("Meditação do Silêncio Interior", "Mergulhe na profundidade do seu ser.",
+     ["ether", "night"], ["deep", "contemplative"], 1200),
+]
+
+SOUNDSCAPE_ITEMS = [
+    ("Sons da Floresta Tropical", "Ambientes naturais com pássaros e água.",
+     ["water", "earth"], ["calm", "airy"], 1800),
+    ("Chuva Relaxante", "Som meditativo de chuva para descanso.",
+     ["water", "night"], ["calm", "dark"], 1800),
+    ("Oceano ao Amanhecer", "Ondas suaves e sons costeiros inspiradores.",
+     ["water", "light"], ["calm", "luminous"], 1800),
 ]
 
 BREATHING_ITEMS = [
@@ -261,12 +291,13 @@ def seed(reset: bool = False) -> None:
 
         # 2) Imagens contemplativas (SVG próprios).
         images_by_slug: dict[str, ImageAsset] = {}
-        for slug, title, axes, moods, colors, tags, ca, cb in IMAGES:
+        for slug, title, axes, moods, colors, tags, ca, cb, ext_url in IMAGES:
             filename = f"{slug}.svg"
             (image_dir / filename).write_text(_svg(1200, 800, ca, cb, title), encoding="utf-8")
             img = ImageAsset(
                 title=title,
                 storage_path=f"images/{filename}",
+                external_url=ext_url,
                 width=1200,
                 height=800,
                 colors=colors,
@@ -328,7 +359,39 @@ def seed(reset: bool = False) -> None:
             binaural_by_slug[entry["slug"]] = item
             content_by_title[item.title] = item
 
-        # 4) Práticas de respiração (visuais, sem áudio).
+        # 4) Meditações guiadas.
+        for title, desc, axes, moods, duration in MEDITATION_ITEMS:
+            item = ContentItem(
+                title=title,
+                description=desc,
+                type="meditation",
+                spiritual_axis=axes,
+                mood_tags=moods,
+                duration_seconds=duration,
+                energy_level=1,
+                published_at=NOW,
+            )
+            db.add(item)
+            db.flush()
+            content_by_title[title] = item
+
+        # 5) Sons da natureza (soundscapes).
+        for title, desc, axes, moods, duration in SOUNDSCAPE_ITEMS:
+            item = ContentItem(
+                title=title,
+                description=desc,
+                type="soundscape",
+                spiritual_axis=axes,
+                mood_tags=moods,
+                duration_seconds=duration,
+                energy_level=1,
+                published_at=NOW,
+            )
+            db.add(item)
+            db.flush()
+            content_by_title[title] = item
+
+        # 6) Práticas de respiração (visuais, sem áudio).
         breathing_by_pattern: dict[str, ContentItem] = {}
         for title, desc, axes, moods, duration, pattern in BREATHING_ITEMS:
             item = ContentItem(
@@ -346,7 +409,7 @@ def seed(reset: bool = False) -> None:
             breathing_by_pattern[pattern] = item
             content_by_title[title] = item
 
-        # 5) Jornadas espirituais de 7 dias.
+        # 7) Jornadas espirituais de 7 dias.
         for j in JOURNEYS:
             journey = SpiritualJourney(
                 title=j["title"],
@@ -371,7 +434,7 @@ def seed(reset: bool = False) -> None:
                     )
                 )
 
-        # 6) Playlists iniciais.
+        # 8) Playlists iniciais.
         for title, desc, item_titles in PLAYLISTS:
             playlist = Playlist(title=title, description=desc)
             db.add(playlist)
@@ -385,7 +448,7 @@ def seed(reset: bool = False) -> None:
                     )
                 )
 
-        # 7) Usuário demo com onboarding preenchido.
+        # 9) Usuário demo com onboarding preenchido.
         demo = User(
             email="demo@aurasync.app",
             password_hash=hash_password("16Ta15Ti@"),
@@ -406,7 +469,7 @@ def seed(reset: bool = False) -> None:
             )
         )
 
-        # 8) Conta de administrador do CMS — senha via AURASYNC_SEED_ADMIN_PASSWORD
+        # 10) Conta de administrador do CMS — senha via AURASYNC_SEED_ADMIN_PASSWORD
         # em produção; nunca reutilize o valor padrão de dev fora do ambiente local.
         admin_password = settings.seed_admin_password
         admin = User(
@@ -420,9 +483,11 @@ def seed(reset: bool = False) -> None:
         db.commit()
         print("Seed concluído:")
         print(f"  {len(manifest)} sessões binaurais (áudio próprio)")
-        print(f"  {len(IMAGES)} imagens contemplativas (SVG próprios)")
+        print(f"  {len(MEDITATION_ITEMS)} meditações guiadas")
+        print(f"  {len(SOUNDSCAPE_ITEMS)} soundscapes (sons da natureza)")
         print(f"  {len(BREATHING_ITEMS)} práticas de respiração")
-        print(f"  {len(JOURNEYS)} jornadas de 7 dias")
+        print(f"  {len(IMAGES)} imagens contemplativas (SVG próprios)")
+        print(f"  {len(JOURNEYS)} jornadas espirituais de 7 dias")
         print(f"  {len(PLAYLISTS)} playlists")
         print("  usuário demo (app): demo@aurasync.app / 16Ta15Ti@")
         print(f"  administrador (CMS): admin@aurasync.app / {admin_password}")
