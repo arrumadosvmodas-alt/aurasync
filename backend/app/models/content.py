@@ -39,7 +39,7 @@ class ContentItem(Base):
     __tablename__ = "content_items"
     __table_args__ = (
         CheckConstraint(
-            "type IN ('music','meditation','soundscape','binaural','breathing')",
+            "type IN ('music','meditation','soundscape','binaural','breathing','ambient')",
             name="ck_content_type",
         ),
     )

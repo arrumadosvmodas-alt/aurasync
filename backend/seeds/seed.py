@@ -92,6 +92,12 @@ MEDITATION_ITEMS = [
      ["earth", "root"], ["grounded", "calm"], 900),
     ("Meditação do Silêncio Interior", "Mergulhe na profundidade do seu ser.",
      ["ether", "night"], ["deep", "contemplative"], 1200),
+    ("Meditação Vipassana: Observação", "Desenvolva clareza mental observando os pensamentos sem julgamento.",
+     ["ether", "air"], ["clear", "focused"], 1500),
+    ("Meditação Metta: Compaixão Infinita", "Cultive amor incondicional por si mesmo e pelos outros.",
+     ["heart", "light"], ["warm", "loving"], 900),
+    ("Meditação Body Scan Profundo", "Percorra cada parte do seu corpo com consciência plena.",
+     ["earth", "root"], ["grounded", "calm"], 1200),
 ]
 
 SOUNDSCAPE_ITEMS = [
@@ -101,6 +107,23 @@ SOUNDSCAPE_ITEMS = [
      ["water", "night"], ["calm", "dark"], 1800),
     ("Oceano ao Amanhecer", "Ondas suaves e sons costeiros inspiradores.",
      ["water", "light"], ["calm", "luminous"], 1800),
+    ("Floresta de Pinheiros à Noite", "Ambiente florestal profundo com sons noturnos subtis.",
+     ["earth", "night"], ["deep", "dark"], 1800),
+    ("Ribeirão Cristalino", "Água corrente pura com pássaros ao fundo.",
+     ["water", "root"], ["gentle", "airy"], 1800),
+    ("Tempestade Distante", "Sons de trovão e chuva para meditação profunda.",
+     ["water", "ether"], ["calm", "contemplative"], 2400),
+]
+
+MUSIC_ITEMS = [
+    ("Harmonia Celestial", "Música ambiente minimalista com tons puros.",
+     ["ether", "light"], ["luminous", "sacred"], 900),
+    ("Acordes da Cura", "Frequências de relaxamento profundo e regeneração.",
+     ["heart", "light"], ["warm", "healing"], 1200),
+    ("Piano Meditativo", "Composição delicada para contemplação e paz.",
+     ["heart", "ether"], ["calm", "gentle"], 1500),
+    ("Cristais Cantadores", "Sonic landscape experimental para expansão de consciência.",
+     ["ether", "fire"], ["vast", "luminous"], 1800),
 ]
 
 BREATHING_ITEMS = [
@@ -373,6 +396,16 @@ def seed(reset: bool = False) -> None:
             )
             db.add(item)
             db.flush()
+            audio = AudioAsset(
+                content_item_id=item.id,
+                storage_path=f"audio/{manifest[0]['file']}",
+                format="wav",
+                sample_rate=44100,
+                channels=2,
+                is_loopable=True,
+            )
+            db.add(audio)
+            db.flush()
             content_by_title[title] = item
 
         # 5) Sons da natureza (soundscapes).
@@ -389,9 +422,45 @@ def seed(reset: bool = False) -> None:
             )
             db.add(item)
             db.flush()
+            audio = AudioAsset(
+                content_item_id=item.id,
+                storage_path=f"audio/{manifest[0]['file']}",
+                format="wav",
+                sample_rate=44100,
+                channels=2,
+                is_loopable=True,
+            )
+            db.add(audio)
+            db.flush()
             content_by_title[title] = item
 
-        # 6) Práticas de respiração (visuais, sem áudio).
+        # 6) Música ambiente e harmonia.
+        for title, desc, axes, moods, duration in MUSIC_ITEMS:
+            item = ContentItem(
+                title=title,
+                description=desc,
+                type="music",
+                spiritual_axis=axes,
+                mood_tags=moods,
+                duration_seconds=duration,
+                energy_level=1,
+                published_at=NOW,
+            )
+            db.add(item)
+            db.flush()
+            audio = AudioAsset(
+                content_item_id=item.id,
+                storage_path=f"audio/{manifest[0]['file']}",
+                format="wav",
+                sample_rate=44100,
+                channels=2,
+                is_loopable=True,
+            )
+            db.add(audio)
+            db.flush()
+            content_by_title[title] = item
+
+        # 7) Práticas de respiração (visuais, sem áudio).
         breathing_by_pattern: dict[str, ContentItem] = {}
         for title, desc, axes, moods, duration, pattern in BREATHING_ITEMS:
             item = ContentItem(
@@ -409,7 +478,7 @@ def seed(reset: bool = False) -> None:
             breathing_by_pattern[pattern] = item
             content_by_title[title] = item
 
-        # 7) Jornadas espirituais de 7 dias.
+        # 8) Jornadas espirituais de 7 dias.
         for j in JOURNEYS:
             journey = SpiritualJourney(
                 title=j["title"],
@@ -434,7 +503,7 @@ def seed(reset: bool = False) -> None:
                     )
                 )
 
-        # 8) Playlists iniciais.
+        # 9) Playlists iniciais.
         for title, desc, item_titles in PLAYLISTS:
             playlist = Playlist(title=title, description=desc)
             db.add(playlist)
@@ -448,7 +517,7 @@ def seed(reset: bool = False) -> None:
                     )
                 )
 
-        # 9) Usuário demo com onboarding preenchido.
+        # 10) Usuário demo com onboarding preenchido.
         demo = User(
             email="demo@aurasync.app",
             password_hash=hash_password("16Ta15Ti@"),
@@ -469,7 +538,7 @@ def seed(reset: bool = False) -> None:
             )
         )
 
-        # 10) Conta de administrador do CMS — senha via AURASYNC_SEED_ADMIN_PASSWORD
+        # 11) Conta de administrador do CMS — senha via AURASYNC_SEED_ADMIN_PASSWORD
         # em produção; nunca reutilize o valor padrão de dev fora do ambiente local.
         admin_password = settings.seed_admin_password
         admin = User(
@@ -485,7 +554,10 @@ def seed(reset: bool = False) -> None:
         print(f"  {len(manifest)} sessões binaurais (áudio próprio)")
         print(f"  {len(MEDITATION_ITEMS)} meditações guiadas")
         print(f"  {len(SOUNDSCAPE_ITEMS)} soundscapes (sons da natureza)")
+        print(f"  {len(MUSIC_ITEMS)} faixas de música ambiente")
         print(f"  {len(BREATHING_ITEMS)} práticas de respiração")
+        total_content = len(manifest) + len(MEDITATION_ITEMS) + len(SOUNDSCAPE_ITEMS) + len(MUSIC_ITEMS) + len(BREATHING_ITEMS)
+        print(f"  >>> TOTAL: {total_content} itens de conteúdo")
         print(f"  {len(IMAGES)} imagens contemplativas (SVG próprios)")
         print(f"  {len(JOURNEYS)} jornadas espirituais de 7 dias")
         print(f"  {len(PLAYLISTS)} playlists")
