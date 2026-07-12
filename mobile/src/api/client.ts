@@ -76,6 +76,25 @@ export function mediaUrl(url: string | null | undefined): string | undefined {
   return url.startsWith('http') ? url : `${API_BASE}${url}`;
 }
 
+const FALLBACK_IMAGES: Record<string, string> = {
+  meditation: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=400&auto=format&fit=crop',
+  music: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=400&auto=format&fit=crop',
+  soundscape: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=400&auto=format&fit=crop',
+  binaural: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=400&auto=format&fit=crop',
+  breathing: 'https://images.unsplash.com/photo-1477414348463-c0eb7f1359b6?q=80&w=400&auto=format&fit=crop',
+};
+
+export function coverUrl(item: ContentItem | null | undefined): string | undefined {
+  const url = item?.cover_image?.url;
+  if (url) return mediaUrl(url);
+  if (item?.type) return FALLBACK_IMAGES[item.type];
+  return FALLBACK_IMAGES.meditation;
+}
+
+export function audioUrl(item: ContentItem | null | undefined): string | undefined {
+  return mediaUrl(item?.audio?.[0]?.url) || undefined;
+}
+
 export async function api<T = unknown>(
   path: string,
   options: { method?: string; body?: unknown; token?: string | null } = {},

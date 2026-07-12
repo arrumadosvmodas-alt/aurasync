@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { ContentItem, mediaUrl } from '../api/client';
+import { ContentItem, coverUrl } from '../api/client';
 import { AXIS_LABELS, colors, TYPE_LABELS } from '../theme';
 
 export function ContentCard({
@@ -13,17 +13,19 @@ export function ContentCard({
   subtitle?: string;
   onPress: () => void;
 }) {
-  const cover = mediaUrl(item.cover_image?.url);
+  const [imgFailed, setImgFailed] = useState(false);
+  const url = coverUrl(item);
+  const showFallback = !url || imgFailed;
   return (
     <Pressable style={styles.card} onPress={onPress}>
-      {cover ? (
-        <Image source={{ uri: cover }} style={styles.cover} />
-      ) : (
+      {showFallback ? (
         <View style={[styles.cover, styles.coverFallback]}>
           <Text style={styles.coverEmoji}>
             {item.type === 'breathing' ? '🫁' : '🎧'}
           </Text>
         </View>
+      ) : (
+        <Image source={{ uri: url }} style={styles.cover} onError={() => setImgFailed(true)} />
       )}
       <View style={styles.info}>
         <Text style={styles.title} numberOfLines={1}>

@@ -1,36 +1,36 @@
 export const colors = {
-  background: '#0b1326',
-  surface: '#171f33',
-  surfaceBright: '#31394d',
-  surfaceContainer: '#171f33',
-  surfaceContainerLow: '#131b2e',
-  surfaceContainerHigh: '#222a3d',
-  surfaceContainerHighest: '#2d3449',
-  surfaceVariant: '#2d3449',
-  onSurface: '#dae2fd',
-  onSurfaceVariant: '#ccc3d4',
-  primary: '#d3bbff',
-  onPrimary: '#3f0689',
-  primaryContainer: '#4c1d95',
-  onPrimaryContainer: '#b994ff',
-  secondary: '#ffca45',
-  onSecondary: '#3f2e00',
-  secondaryContainer: '#e4ae00',
-  onSecondaryContainer: '#5b4400',
-  tertiary: '#89ceff',
-  onTertiary: '#00344d',
-  error: '#ffb4ab',
-  onError: '#690005',
-  errorContainer: '#93000a',
-  onErrorContainer: '#ffdad6',
-  outline: '#958e9e',
-  outlineVariant: '#4a4452',
+  background: '#FBF9F1', // Cosmic base warm cream
+  surface: '#FFFFFF', // Clean white surface cards
+  surfaceBright: '#FFFFFF',
+  surfaceContainer: '#F5F3E7', // Warm cream container
+  surfaceContainerLow: '#E6E1D4', // Warm sand/beige
+  surfaceContainerHigh: '#DDE6D5', // Soft light green-tinted grey
+  surfaceContainerHighest: '#C5D3C1',
+  surfaceVariant: '#E6E1D4',
+  onSurface: '#1D1C16', // Dark text
+  onSurfaceVariant: '#797869', // Muted brown-grey text
+  primary: '#141E0D', // Dark forest green-black primary
+  onPrimary: '#FFFFFF',
+  primaryContainer: '#DDE6D5', // Soft sage/olive light green container
+  onPrimaryContainer: '#141E0D',
+  secondary: '#D0902F', // Golden brown / accent
+  onSecondary: '#FFFFFF',
+  secondaryContainer: '#F9ECD5',
+  onSecondaryContainer: '#D0902F',
+  tertiary: '#7DA083', // Sage green accent
+  onTertiary: '#FFFFFF',
+  error: '#EF4444',
+  onError: '#FFFFFF',
+  errorContainer: '#FEE2E2',
+  onErrorContainer: '#EF4444',
+  outline: '#A8B59E', // Sage-grey border
+  outlineVariant: '#E6E1D4',
   /* backward compatibility aliases */
-  accent: '#ffca45',
-  text: '#dae2fd',
-  textDim: '#ccc3d4',
-  surfaceLight: '#222a3d',
-  danger: '#ffb4ab',
+  accent: '#D0902F',
+  text: '#1D1C16',
+  textDim: '#797869',
+  surfaceLight: '#E6E1D4',
+  danger: '#EF4444',
 };
 
 export const typography = {
@@ -93,8 +93,8 @@ export const spacing = {
 };
 
 export const glass = {
-  background: 'rgba(255, 255, 255, 0.05)',
-  borderColor: 'rgba(211, 187, 255, 0.1)',
+  background: 'rgba(255, 255, 255, 0.6)',
+  borderColor: 'rgba(168, 181, 158, 0.3)',
   borderWidth: 0.5,
 };
 

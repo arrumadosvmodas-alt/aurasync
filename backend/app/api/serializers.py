@@ -32,7 +32,7 @@ def serialize_image(db: Session, img: ImageAsset) -> ImageAssetOut:
     return ImageAssetOut(
         id=img.id,
         title=img.title,
-        url=_media_url(img.storage_path) or img.external_url,
+        url=img.external_url or img.cdn_url or _media_url(img.storage_path),
         colors=img.colors or [],
         visual_tags=img.visual_tags or [],
         spiritual_axis=img.spiritual_axis or [],

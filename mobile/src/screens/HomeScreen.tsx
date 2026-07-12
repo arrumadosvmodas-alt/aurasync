@@ -10,10 +10,11 @@ import {
   Text,
   View,
 } from 'react-native';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
-import { api, mediaUrl, Recommendation } from '../api/client';
+import { api, coverUrl, Recommendation } from '../api/client';
 import { useApp } from '../context/AppContext';
-import { colors, glass, rounded, spacing, typography } from '../theme';
+import { colors, rounded, spacing, typography } from '../theme';
 
 function greeting(): string {
   const hour = new Date().getHours();
@@ -33,20 +34,20 @@ export function HomeScreen() {
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation<any>();
 
-  // Animação de pulso do indicador de respiração
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  // Pulse animation for recommended hero card indicator
+  const pulseAnim = useRef(new Animated.Value(0.9)).current;
 
   useEffect(() => {
     Animated.loop(
       Animated.sequence([
         Animated.timing(pulseAnim, {
-          toValue: 1.15,
-          duration: 4000,
+          toValue: 1.2,
+          duration: 1500,
           useNativeDriver: true,
         }),
         Animated.timing(pulseAnim, {
-          toValue: 1.0,
-          duration: 4000,
+          toValue: 0.9,
+          duration: 1500,
           useNativeDriver: true,
         }),
       ]),
@@ -54,12 +55,14 @@ export function HomeScreen() {
   }, [pulseAnim]);
 
   const load = useCallback(async () => {
-    setLoading(false); // evita re-renders agressivos
+    setLoading(true);
     try {
       const data = await api<Recommendation[]>('/recommendations?limit=8', { token });
       setRecs(data);
     } catch {
       setRecs([]);
+    } finally {
+      setLoading(false);
     }
   }, [token]);
 
@@ -67,9 +70,13 @@ export function HomeScreen() {
     load();
   }, [load]);
 
-  const userName = email ? capitalize(email.split('@')[0]) : 'Visitante';
+  const userName = email ? capitalize(email.split('@')[0]) : 'Gabriel';
   const heroItem = recs[0]?.item;
-  const shortSessions = recs.slice(1);
+  // Short sessions defined as duration <= 8 minutes (480 seconds)
+  const shortSessions = recs.filter((rec) => {
+    const secs = rec.item.duration_seconds || 0;
+    return secs > 0 && secs <= 480;
+  });
 
   return (
     <ScrollView
@@ -83,11 +90,22 @@ export function HomeScreen() {
             await load();
             setLoading(false);
           }}
-          tintColor={colors.primary}
+          tintColor="#7DA083"
         />
       }
     >
-      {/* 1. Welcome Section */}
+      {/* 1. Custom Top Header */}
+      <View style={styles.header}>
+        <View style={styles.logoRow}>
+          <MaterialCommunityIcons name="spa" size={32} color="#7DA083" />
+          <Text style={styles.headerTitle}>AuraSync</Text>
+        </View>
+        <Pressable style={styles.notificationBtn}>
+          <MaterialCommunityIcons name="bell-outline" size={22} color="#141E0D" />
+        </Pressable>
+      </View>
+
+      {/* 2. Greetings */}
       <View style={styles.welcomeSection}>
         <Text style={styles.welcomeSubtitle}>
           {greeting()}, {userName}
@@ -95,58 +113,22 @@ export function HomeScreen() {
         <Text style={styles.welcomeTitle}>Encontre sua paz interior hoje</Text>
       </View>
 
-      {/* 2. Recommended Hero Card */}
+      {/* 3. Recommended Hero Card */}
       {heroItem ? (
         <Pressable
           style={styles.heroCard}
           onPress={() => openPlayer({ item: heroItem })}
+          testID="recommended_hero_card"
         >
-          {heroItem.cover_image?.url ? (
-            <ImageBackground
-              source={{ uri: mediaUrl(heroItem.cover_image.url) }}
-              style={styles.heroBg}
-              imageStyle={styles.heroBgImage}
-            >
-              <View style={styles.heroOverlay}>
-                <View style={styles.heroHeader}>
-                  <View style={styles.heroTag}>
-                    <Text style={styles.heroTagText}>Recomendado agora</Text>
-                  </View>
-                  <Animated.View
-                    style={[
-                      styles.breathCircle,
-                      { transform: [{ scale: pulseAnim }] },
-                    ]}
-                  />
-                </View>
-
-                <View style={styles.heroFooter}>
-                  <Text style={styles.heroTitle}>{heroItem.title}</Text>
-                  {heroItem.description ? (
-                    <Text style={styles.heroDesc} numberOfLines={2}>
-                      {heroItem.description}
-                    </Text>
-                  ) : null}
-
-                  <View style={styles.heroActions}>
-                    <View style={styles.playButton}>
-                      <Text style={styles.playButtonIcon}>▶</Text>
-                      <Text style={styles.playButtonText}>Começar Agora</Text>
-                    </View>
-                    {heroItem.duration_seconds ? (
-                      <Text style={styles.heroDuration}>
-                        🕒 {Math.round(heroItem.duration_seconds / 60)} min
-                      </Text>
-                    ) : null}
-                  </View>
-                </View>
-              </View>
-            </ImageBackground>
-          ) : (
-            <View style={styles.heroFallback}>
+          <ImageBackground
+            source={{ uri: coverUrl(heroItem) }}
+            style={styles.heroBg}
+            imageStyle={styles.heroBgImage}
+          >
+            <View style={styles.heroOverlay}>
               <View style={styles.heroHeader}>
                 <View style={styles.heroTag}>
-                  <Text style={styles.heroTagText}>Recomendado agora</Text>
+                  <Text style={styles.heroTagText}>RECOMENDADO AGORA</Text>
                 </View>
                 <Animated.View
                   style={[
@@ -155,120 +137,135 @@ export function HomeScreen() {
                   ]}
                 />
               </View>
+
               <View style={styles.heroFooter}>
                 <Text style={styles.heroTitle}>{heroItem.title}</Text>
-                {heroItem.description ? (
-                  <Text style={styles.heroDesc} numberOfLines={2}>
-                    {heroItem.description}
-                  </Text>
-                ) : null}
+                <Text style={styles.heroDesc} numberOfLines={2}>
+                  {heroItem.description ||
+                    'Uma jornada profunda para alinhar sua energia e focar sua mente.'}
+                </Text>
+
                 <View style={styles.heroActions}>
                   <View style={styles.playButton}>
-                    <Text style={styles.playButtonIcon}>▶</Text>
+                    <MaterialCommunityIcons name="play" size={14} color="#FFFFFF" />
                     <Text style={styles.playButtonText}>Começar Agora</Text>
                   </View>
                   {heroItem.duration_seconds ? (
-                    <Text style={styles.heroDuration}>
-                      🕒 {Math.round(heroItem.duration_seconds / 60)} min
-                    </Text>
+                    <View style={styles.durationContainer}>
+                      <MaterialCommunityIcons
+                        name="timer-outline"
+                        size={14}
+                        color="rgba(255, 255, 255, 0.8)"
+                      />
+                      <Text style={styles.heroDuration}>
+                        {Math.round(heroItem.duration_seconds / 60)} min
+                      </Text>
+                    </View>
                   ) : null}
                 </View>
               </View>
             </View>
-          )}
+          </ImageBackground>
         </Pressable>
       ) : null}
 
-      {/* 3. Quick Access Bento Grid */}
+      {/* 4. Quick Access Bento Grid */}
       <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Acessos Rápidos</Text>
+        <Text style={styles.sectionTitle}>ACESSOS RÁPIDOS</Text>
       </View>
       <View style={styles.bentoGrid}>
         <Pressable
           style={styles.bentoCard}
-          onPress={() => navigation.navigate('Explorar')}
+          onPress={() => navigation.navigate('Explorar', { category: 'soundscape' })}
         >
-          <View style={[styles.bentoIconBg, { backgroundColor: 'rgba(137, 206, 255, 0.1)' }]}>
-            <Text style={styles.bentoEmoji}>🌲</Text>
-          </View>
-          <Text style={styles.bentoText}>Natureza</Text>
+          <MaterialCommunityIcons name="tree" size={24} color="#7DA083" />
+          <Text style={styles.bentoText}>Sons da Natureza</Text>
         </Pressable>
 
         <Pressable
           style={styles.bentoCard}
-          onPress={() => navigation.navigate('Explorar')}
+          onPress={() => navigation.navigate('Explorar', { category: 'binaural' })}
         >
-          <View style={[styles.bentoIconBg, { backgroundColor: 'rgba(211, 187, 255, 0.1)' }]}>
-            <Text style={styles.bentoEmoji}>🎧</Text>
-          </View>
-          <Text style={styles.bentoText}>Binaural</Text>
-        </Pressable>
-
-        <Pressable
-          style={styles.bentoCard}
-          onPress={() => navigation.navigate('Meditar')}
-        >
-          <View style={[styles.bentoIconBg, { backgroundColor: 'rgba(255, 202, 69, 0.1)' }]}>
-            <Text style={styles.bentoEmoji}>🫁</Text>
-          </View>
-          <Text style={styles.bentoText}>Respiração</Text>
+          <MaterialCommunityIcons name="waveform" size={24} color="#7DA083" />
+          <Text style={styles.bentoText}>Ondas Binaurais</Text>
         </Pressable>
 
         <Pressable
           style={styles.bentoCard}
           onPress={() => navigation.navigate('Meditar')}
         >
-          <View style={[styles.bentoIconBg, { backgroundColor: 'rgba(76, 29, 149, 0.15)' }]}>
-            <Text style={styles.bentoEmoji}>☯</Text>
-          </View>
-          <Text style={styles.bentoText}>Meditação</Text>
+          <MaterialCommunityIcons name={"weather-windy" as any} size={24} color="#7DA083" />
+          <Text style={styles.bentoText}>Exercício Respirar</Text>
+        </Pressable>
+
+        <Pressable
+          style={styles.bentoCard}
+          onPress={() => navigation.navigate('Explorar', { category: 'meditation' })}
+        >
+          <MaterialCommunityIcons name={"spa" as any} size={24} color="#7DA083" />
+          <Text style={styles.bentoText}>Meditação Zen</Text>
         </Pressable>
       </View>
 
-      {/* 4. Recent Activities / Short Sessions */}
+      {/* 5. Recent Short Sessions */}
       <View style={styles.sessionHeaderContainer}>
-        <Text style={styles.sectionTitle}>Sessões Curtas</Text>
+        <Text style={styles.sectionTitle}>SESSÕES CURTAS</Text>
         <Pressable onPress={() => navigation.navigate('Explorar')}>
           <Text style={styles.seeAllText}>Ver todas</Text>
         </Pressable>
       </View>
 
       <View style={styles.sessionList}>
-        {shortSessions.map((rec) => (
-          <Pressable
-            key={rec.item.id}
-            style={styles.sessionCard}
-            onPress={() => openPlayer({ item: rec.item })}
-          >
-            <View style={styles.sessionIconBox}>
-              <Text style={styles.sessionEmoji}>
-                {rec.item.type === 'breathing' ? '🫁' : rec.item.type === 'soundscape' ? '🌲' : '🎧'}
-              </Text>
-            </View>
-            <View style={styles.sessionInfo}>
-              <Text style={styles.sessionTitleText} numberOfLines={1}>
-                {rec.item.title}
-              </Text>
-              <Text style={styles.sessionSubtitleText} numberOfLines={1}>
-                {rec.reasons[0] || 'Recomendado para o seu momento'}
-              </Text>
-            </View>
-            <View style={styles.sessionRight}>
-              {rec.item.duration_seconds ? (
-                <Text style={styles.sessionDurationText}>
-                  {Math.round(rec.item.duration_seconds / 60)} min
+        {shortSessions.length > 0 ? (
+          shortSessions.map((rec) => (
+            <Pressable
+              key={rec.item.id}
+              style={styles.sessionCard}
+              onPress={() => openPlayer({ item: rec.item })}
+            >
+              <View style={styles.sessionIconBox}>
+                <MaterialCommunityIcons
+                  name={
+                    (rec.item.type === 'breathing'
+                      ? 'weather-windy'
+                      : rec.item.type === 'soundscape'
+                      ? 'tree'
+                      : rec.item.type === 'binaural'
+                      ? 'waveform'
+                      : 'spa') as any
+                  }
+                  size={18}
+                  color="#141E0D"
+                />
+              </View>
+              <View style={styles.sessionInfo}>
+                <Text style={styles.sessionTitleText} numberOfLines={1}>
+                  {rec.item.title}
                 </Text>
-              ) : null}
-              <Text style={styles.sessionChevron}>›</Text>
-            </View>
-          </Pressable>
-        ))}
-
-        {!loading && recs.length === 0 ? (
-          <Text style={styles.empty}>
-            Sem recomendações ainda — verifique se o backend está no ar.
-          </Text>
-        ) : null}
+                <Text style={styles.sessionSubtitleText} numberOfLines={1}>
+                  {rec.item.type === 'soundscape'
+                    ? 'Natureza'
+                    : rec.item.type === 'binaural'
+                    ? 'Binaural'
+                    : rec.item.type === 'breathing'
+                    ? 'Respiração'
+                    : 'Meditação'}{' '}
+                  • Eixo: {rec.item.spiritual_axis?.[0] || 'Geral'}
+                </Text>
+              </View>
+              <View style={styles.sessionRight}>
+                {rec.item.duration_seconds ? (
+                  <Text style={styles.sessionDurationText}>
+                    {Math.round(rec.item.duration_seconds / 60)} min
+                  </Text>
+                ) : null}
+                <MaterialCommunityIcons name="chevron-right" size={16} color="#7DA083" />
+              </View>
+            </Pressable>
+          ))
+        ) : (
+          <Text style={styles.empty}>Nenhuma sessão curta encontrada.</Text>
+        )}
       </View>
     </ScrollView>
   );
@@ -277,46 +274,72 @@ export function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: '#FBF9F1', // Light warm cream background
   },
   content: {
-    padding: spacing.marginMobile,
-    paddingTop: spacing.gutter + 32,
-    gap: spacing.md,
-    paddingBottom: spacing.xl,
+    padding: 16,
+    paddingTop: 12,
+    gap: 16,
+    paddingBottom: 64,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+  },
+  logoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#141E0D',
+    fontFamily: typography.headlineMd.fontFamily,
+  },
+  notificationBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#DDE6D5',
+    borderWidth: 0.5,
+    borderColor: '#A8B59E',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   welcomeSection: {
-    gap: spacing.xs,
+    gap: 4,
   },
   welcomeSubtitle: {
-    ...typography.labelMd,
-    color: colors.onSurfaceVariant,
+    fontSize: 14,
+    color: '#797869',
+    fontWeight: '500',
+    fontFamily: typography.labelMd.fontFamily,
   },
   welcomeTitle: {
-    ...typography.headlineLg,
-    color: colors.onSurface,
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#141E0D',
+    fontFamily: typography.headlineMd.fontFamily,
   },
   heroCard: {
-    borderRadius: rounded.xl,
+    borderRadius: 20,
     overflow: 'hidden',
-    shadowColor: colors.primaryContainer,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.15,
-    shadowRadius: 16,
-    elevation: 6,
     height: 220,
-    backgroundColor: colors.surfaceContainerLow,
+    backgroundColor: '#E6E3D1',
   },
   heroBg: {
     flex: 1,
   },
   heroBgImage: {
-    opacity: 0.8,
+    opacity: 0.9,
   },
   heroOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(11, 19, 38, 0.55)',
-    padding: spacing.md,
+    backgroundColor: 'rgba(20, 30, 13, 0.45)', // Greenish dark overlay
+    padding: 16,
     justifyContent: 'space-between',
   },
   heroHeader: {
@@ -325,177 +348,171 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   heroTag: {
-    backgroundColor: glass.background,
-    borderColor: glass.borderColor,
-    borderWidth: glass.borderWidth,
-    borderRadius: rounded.full,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
+    backgroundColor: '#DDE6D5',
+    borderWidth: 0.5,
+    borderColor: '#A8B59E',
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
   },
   heroTagText: {
-    ...typography.labelSm,
-    color: colors.primary,
-    textTransform: 'uppercase',
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#141E0D',
+    fontFamily: typography.labelSm.fontFamily,
   },
   breathCircle: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    borderWidth: 1.5,
-    borderColor: 'rgba(211, 187, 255, 0.45)',
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: 'rgba(125, 160, 131, 0.5)',
+    borderWidth: 1,
+    borderColor: '#141E0D',
   },
   heroFooter: {
-    gap: spacing.xs,
+    gap: 4,
   },
   heroTitle: {
-    ...typography.headlineMd,
-    color: colors.onSurface,
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    fontFamily: typography.headlineMd.fontFamily,
   },
   heroDesc: {
-    ...typography.bodyMd,
-    color: colors.onSurfaceVariant,
+    fontSize: 12,
+    color: 'rgba(255, 255, 255, 0.8)',
+    fontFamily: typography.bodyMd.fontFamily,
   },
   heroActions: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.md,
-    marginTop: spacing.xs,
+    justifyContent: 'space-between',
+    marginTop: 8,
   },
   playButton: {
-    backgroundColor: colors.primaryContainer,
-    borderRadius: rounded.full,
+    backgroundColor: '#141E0D',
+    borderRadius: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: spacing.sm + 4,
-    paddingVertical: spacing.xs + 4,
-    gap: spacing.xs + 2,
-  },
-  playButtonIcon: {
-    color: colors.primary,
-    fontSize: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    gap: 4,
   },
   playButtonText: {
-    ...typography.labelSm,
-    color: colors.primary,
+    fontSize: 11,
+    color: '#FFFFFF',
     fontWeight: '700',
+    fontFamily: typography.labelSm.fontFamily,
+  },
+  durationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
   heroDuration: {
-    ...typography.labelSm,
-    color: colors.onSurfaceVariant,
+    fontSize: 11,
+    color: 'rgba(255, 255, 255, 0.7)',
+    fontFamily: typography.bodyMd.fontFamily,
   },
   heroFallback: {
     flex: 1,
-    padding: spacing.md,
+    padding: 16,
     justifyContent: 'space-between',
-    backgroundColor: colors.surfaceContainer,
+    backgroundColor: '#E6E3D1',
   },
   sectionHeader: {
-    marginTop: spacing.xs,
+    marginTop: 8,
   },
   sectionTitle: {
-    ...typography.labelMd,
-    color: colors.onSurfaceVariant,
-    textTransform: 'uppercase',
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#797869',
     letterSpacing: 1.5,
+    fontFamily: typography.labelMd.fontFamily,
   },
   bentoGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.sm,
+    gap: 10,
   },
   bentoCard: {
-    backgroundColor: glass.background,
-    borderColor: glass.borderColor,
-    borderWidth: glass.borderWidth,
-    borderRadius: rounded.xl,
-    padding: spacing.md,
-    alignItems: 'center',
+    width: '48%',
+    height: 80,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderWidth: 0.5,
+    borderColor: 'rgba(168, 181, 158, 0.3)',
+    borderRadius: 16,
     justifyContent: 'center',
-    gap: spacing.xs + 4,
-    flexGrow: 1,
-    minWidth: '45%',
-  },
-  bentoIconBg: {
-    width: 44,
-    height: 44,
-    borderRadius: rounded.full,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  bentoEmoji: {
-    fontSize: 20,
+    gap: 4,
   },
   bentoText: {
-    ...typography.labelMd,
-    color: colors.onSurface,
+    fontSize: 12,
     fontWeight: '600',
+    color: '#1D1C16',
+    fontFamily: typography.labelSm.fontFamily,
   },
   sessionHeaderContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: spacing.xs,
+    marginTop: 8,
   },
   seeAllText: {
-    ...typography.labelSm,
-    color: colors.primary,
+    fontSize: 11,
+    color: '#7DA083',
+    fontFamily: typography.labelSm.fontFamily,
   },
   sessionList: {
-    gap: spacing.xs + 4,
+    gap: 8,
   },
   sessionCard: {
-    backgroundColor: glass.background,
-    borderColor: glass.borderColor,
-    borderWidth: glass.borderWidth,
-    borderRadius: rounded.lg + 2,
-    padding: spacing.sm + 2,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm + 2,
+    justifyContent: 'space-between',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    borderWidth: 0.5,
+    borderColor: 'rgba(168, 181, 158, 0.2)',
+    borderRadius: 16,
+    padding: 12,
   },
   sessionIconBox: {
-    width: 44,
-    height: 44,
-    borderRadius: rounded.lg,
-    backgroundColor: colors.surfaceContainerHigh,
-    alignItems: 'center',
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: '#DDE6D5',
     justifyContent: 'center',
-  },
-  sessionEmoji: {
-    fontSize: 20,
+    alignItems: 'center',
   },
   sessionInfo: {
     flex: 1,
-    gap: 2,
+    marginLeft: 12,
   },
   sessionTitleText: {
-    ...typography.labelMd,
-    color: colors.onSurface,
-    fontWeight: '600',
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#1D1C16',
+    fontFamily: typography.labelMd.fontFamily,
   },
   sessionSubtitleText: {
-    ...typography.labelSm,
-    color: colors.onSurfaceVariant,
     fontSize: 11,
+    color: '#797869',
+    fontFamily: typography.bodyMd.fontFamily,
   },
   sessionRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
+    gap: 4,
   },
   sessionDurationText: {
-    ...typography.labelSm,
-    color: colors.onSurfaceVariant,
-  },
-  sessionChevron: {
-    color: colors.primary,
-    fontSize: 20,
-    lineHeight: 22,
+    fontSize: 11,
+    color: '#797869',
+    fontFamily: typography.bodyMd.fontFamily,
   },
   empty: {
-    ...typography.bodyMd,
-    color: colors.onSurfaceVariant,
-    textAlign: 'center',
-    paddingVertical: spacing.md,
+    fontSize: 12,
+    color: '#797869',
+    fontFamily: typography.bodyMd.fontFamily,
+    paddingVertical: 12,
   },
 });
