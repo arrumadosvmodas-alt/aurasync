@@ -95,6 +95,60 @@ export function audioUrl(item: ContentItem | null | undefined): string | undefin
   return mediaUrl(item?.audio?.[0]?.url) || undefined;
 }
 
+export interface Playlist {
+  id: string;
+  title: string;
+  description: string | null;
+  item_count: number;
+  is_premium: boolean;
+}
+
+export interface CatalogCategory {
+  name: string;
+  icon: string;
+  description: string;
+  count: number;
+  items: ContentItem[];
+}
+
+export interface CompleteCatalog {
+  catalog: {
+    binaural: CatalogCategory;
+    meditation: CatalogCategory;
+    soundscape: CatalogCategory;
+    music: CatalogCategory;
+    breathing: CatalogCategory;
+  };
+  images: {
+    name: string;
+    icon: string;
+    description: string;
+    count: number;
+    items: ImageAsset[];
+  };
+  playlists: {
+    name: string;
+    icon: string;
+    description: string;
+    count: number;
+    items: Playlist[];
+  };
+  summary: {
+    total_content_items: number;
+    breakdown_by_type: {
+      binaural: number;
+      meditation: number;
+      soundscape: number;
+      music: number;
+      breathing: number;
+    };
+    total_images: number;
+    total_playlists: number;
+    total_categories: number;
+    storage_size_mb: number;
+  };
+}
+
 export async function api<T = unknown>(
   path: string,
   options: { method?: string; body?: unknown; token?: string | null } = {},
@@ -119,4 +173,8 @@ export async function api<T = unknown>(
     throw new Error(detail);
   }
   return resp.json() as Promise<T>;
+}
+
+export async function fetchCompleteCatalog(): Promise<CompleteCatalog> {
+  return api<CompleteCatalog>('/catalog/complete');
 }

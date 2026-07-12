@@ -101,6 +101,7 @@ export const glass = {
 export const TAB_ICONS: Record<string, string> = {
   Início: 'home',
   Explorar: 'compass-outline',
+  Catálogo: 'library',
   Meditar: 'meditation',
   Jornadas: 'map-outline',
   Perfil: 'account-outline',

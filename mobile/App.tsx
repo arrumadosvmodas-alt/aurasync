@@ -14,6 +14,7 @@ import { ActivityIndicator, Text, View } from 'react-native';
 
 import { ImmersivePlayer } from './src/components/ImmersivePlayer';
 import { AppProvider, useApp } from './src/context/AppContext';
+import { CatalogScreen } from './src/screens/CatalogScreen';
 import { ExploreScreen } from './src/screens/ExploreScreen';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { JourneysScreen } from './src/screens/JourneysScreen';
@@ -65,6 +66,7 @@ function Tabs() {
     >
       <Tab.Screen name="Início" component={HomeScreen} />
       <Tab.Screen name="Explorar" component={ExploreScreen} />
+      <Tab.Screen name="Catálogo" component={CatalogScreen} />
       <Tab.Screen name="Meditar" component={MeditateScreen} />
       <Tab.Screen name="Jornadas" component={JourneysScreen} />
       <Tab.Screen name="Perfil" component={ProfileScreen} />
