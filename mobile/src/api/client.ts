@@ -1,5 +1,7 @@
 import { Platform } from 'react-native';
 
+import { FALLBACK_CATALOG, FALLBACK_COMPLETE_CATALOG, FALLBACK_RECOMMENDATIONS } from './fallbackCatalog';
+
 // Ler URL da API via variável de ambiente EXPO_PUBLIC_API_URL
 // Default: http://localhost:8010 ou http://10.0.2.2:8010 no Android (dev local)
 // Produção: https://aurasync-api.vercel.app (ou URL do seu backend)
@@ -154,13 +156,20 @@ export interface CompleteCatalog {
 }
 
 
+function fallbackForPath<T>(path: string): T | null {
+  if (path.startsWith('/catalog/complete')) return FALLBACK_COMPLETE_CATALOG as T;
+  if (path.startsWith('/catalog')) return FALLBACK_CATALOG as T;
+  if (path.startsWith('/recommendations')) return FALLBACK_RECOMMENDATIONS as T;
+  return null;
+}
+
 async function apiIdentityError(path: string, status: number): Promise<string | null> {
   try {
     const health = await fetch(`${API_BASE}/health`);
     if (!health.ok) return null;
     const data = await health.json();
     if (data?.app !== 'AuraSync API') {
-      return `API incorreta em ${API_BASE}: esperado AuraSync API, recebido ${data?.app ?? 'aplica??o desconhecida'}. Verifique EXPO_PUBLIC_API_URL e a porta do backend. Rota ${path} retornou HTTP ${status}.`;
+      return `API incorreta em ${API_BASE}: esperado AuraSync API, recebido ${data?.app ?? 'aplicação desconhecida'}. Verifique EXPO_PUBLIC_API_URL e a porta do backend. Rota ${path} retornou HTTP ${status}.`;
     }
   } catch {
     return null;
@@ -173,15 +182,27 @@ export async function api<T = unknown>(
   options: { method?: string; body?: unknown; token?: string | null } = {},
 ): Promise<T> {
   const { method = 'GET', body, token } = options;
-  const resp = await fetch(`${API_BASE}${path}`, {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    body: body === undefined ? undefined : JSON.stringify(body),
-  });
+  let resp: Response;
+
+  try {
+    resp = await fetch(`${API_BASE}${path}`, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+  } catch (error) {
+    const fallback = fallbackForPath<T>(path);
+    if (fallback) return fallback;
+    throw error;
+  }
+
   if (!resp.ok) {
+    const fallback = fallbackForPath<T>(path);
+    if (fallback) return fallback;
+
     let detail = (await apiIdentityError(path, resp.status)) || `HTTP ${resp.status}`;
     try {
       const data = await resp.json();

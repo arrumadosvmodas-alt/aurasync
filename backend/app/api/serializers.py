@@ -4,13 +4,20 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from ..core.config import settings
-from ..models import AssetLicense, ContentItem, ImageAsset
+from ..models import AssetLicense, AudioAsset, ContentItem, ImageAsset
 from ..schemas.schemas import (
     AudioAssetOut,
     BinauralParamsOut,
     ContentItemOut,
     ImageAssetOut,
 )
+
+PUBLIC_AUDIO_FALLBACK_BY_TYPE = {
+    "binaural": "https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav",
+    "soundscape": "https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav",
+    "meditation": "https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav",
+    "music": "https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav",
+}
 
 
 def _media_url(storage_path: str | None) -> str | None:
@@ -32,11 +39,19 @@ def _attribution_for(db: Session, asset_type: str, asset_id: str) -> str | None:
 
 def _image_url(img: ImageAsset) -> str | None:
     local_url = _media_url(img.storage_path)
-    # Em dev/local e em hosts com storage montado, prioriza a m?dia do projeto.
-    # Em Vercel, /media n?o ? montado; nesse caso usa CDN/externa como fallback seguro.
+    # Em dev/local e em hosts com storage montado, prioriza a mídia do projeto.
+    # Em Vercel, /media não é montado; nesse caso usa CDN/externa como fallback seguro.
     if os.environ.get("VERCEL") == "1":
         return img.cdn_url or img.external_url or local_url
     return local_url or img.cdn_url or img.external_url
+
+
+def _audio_url(audio: AudioAsset, content_type: str) -> str:
+    if audio.cdn_url:
+        return audio.cdn_url
+    if os.environ.get("VERCEL") == "1":
+        return PUBLIC_AUDIO_FALLBACK_BY_TYPE.get(content_type, "")
+    return _media_url(audio.storage_path) or ""
 
 
 def serialize_image(db: Session, img: ImageAsset) -> ImageAssetOut:
@@ -58,7 +73,7 @@ def serialize_content(db: Session, item: ContentItem) -> ContentItemOut:
         audio_out.append(
             AudioAssetOut(
                 id=audio.id,
-                url=audio.cdn_url or _media_url(audio.storage_path) or "",
+                url=_audio_url(audio, item.type),
                 format=audio.format,
                 sample_rate=audio.sample_rate,
                 channels=audio.channels,
