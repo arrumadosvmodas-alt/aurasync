@@ -1,11 +1,11 @@
 import { Platform } from 'react-native';
 
 // Ler URL da API via variável de ambiente EXPO_PUBLIC_API_URL
-// Default: http://localhost:8000 ou http://10.0.2.2:8000 no Android (dev local)
+// Default: http://localhost:8010 ou http://10.0.2.2:8010 no Android (dev local)
 // Produção: https://aurasync-api.vercel.app (ou URL do seu backend)
 export const API_BASE =
   process.env.EXPO_PUBLIC_API_URL ||
-  (Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost:8000');
+  (Platform.OS === 'android' ? 'http://10.0.2.2:8010' : 'http://localhost:8010');
 
 export interface ImageAsset {
   id: string;
@@ -153,6 +153,21 @@ export interface CompleteCatalog {
   };
 }
 
+
+async function apiIdentityError(path: string, status: number): Promise<string | null> {
+  try {
+    const health = await fetch(`${API_BASE}/health`);
+    if (!health.ok) return null;
+    const data = await health.json();
+    if (data?.app !== 'AuraSync API') {
+      return `API incorreta em ${API_BASE}: esperado AuraSync API, recebido ${data?.app ?? 'aplica??o desconhecida'}. Verifique EXPO_PUBLIC_API_URL e a porta do backend. Rota ${path} retornou HTTP ${status}.`;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
 export async function api<T = unknown>(
   path: string,
   options: { method?: string; body?: unknown; token?: string | null } = {},
@@ -167,7 +182,7 @@ export async function api<T = unknown>(
     body: body === undefined ? undefined : JSON.stringify(body),
   });
   if (!resp.ok) {
-    let detail = `HTTP ${resp.status}`;
+    let detail = (await apiIdentityError(path, resp.status)) || `HTTP ${resp.status}`;
     try {
       const data = await resp.json();
       if (typeof data.detail === 'string') detail = data.detail;

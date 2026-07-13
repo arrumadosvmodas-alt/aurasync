@@ -1,3 +1,5 @@
+import os
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -28,11 +30,20 @@ def _attribution_for(db: Session, asset_type: str, asset_id: str) -> str | None:
     return lic.attribution_text or f"{lic.author_name or lic.source_name} — {lic.license_name}"
 
 
+def _image_url(img: ImageAsset) -> str | None:
+    local_url = _media_url(img.storage_path)
+    # Em dev/local e em hosts com storage montado, prioriza a m?dia do projeto.
+    # Em Vercel, /media n?o ? montado; nesse caso usa CDN/externa como fallback seguro.
+    if os.environ.get("VERCEL") == "1":
+        return img.cdn_url or img.external_url or local_url
+    return local_url or img.cdn_url or img.external_url
+
+
 def serialize_image(db: Session, img: ImageAsset) -> ImageAssetOut:
     return ImageAssetOut(
         id=img.id,
         title=img.title,
-        url=img.external_url or img.cdn_url or _media_url(img.storage_path),
+        url=_image_url(img),
         colors=img.colors or [],
         visual_tags=img.visual_tags or [],
         spiritual_axis=img.spiritual_axis or [],

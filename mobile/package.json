@@ -29,7 +29,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "build:web": "expo export --platform web --output-dir=web-build"
+    "build:web": "expo export --platform web --output-dir=web-build",
+    "web:aurasync": "expo start --web --clear"
   },
   "private": true
 }
