@@ -1,7 +1,11 @@
+import { Platform } from 'react-native';
+
 // Ler URL da API via variável de ambiente EXPO_PUBLIC_API_URL
-// Default: http://localhost:8000 (dev local)
+// Default: http://localhost:8000 ou http://10.0.2.2:8000 no Android (dev local)
 // Produção: https://aurasync-api.vercel.app (ou URL do seu backend)
-export const API_BASE = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8000';
+export const API_BASE =
+  process.env.EXPO_PUBLIC_API_URL ||
+  (Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost:8000');
 
 export interface ImageAsset {
   id: string;

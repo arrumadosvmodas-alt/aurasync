@@ -105,7 +105,6 @@ export function CatalogScreen() {
               <Image
                 source={{ uri: img.url || undefined }}
                 style={styles.image}
-                defaultSource={require('../../assets/placeholder.png')}
               />
               <Text style={styles.imageTitle} numberOfLines={2}>
                 {img.title}

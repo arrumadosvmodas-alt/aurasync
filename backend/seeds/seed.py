@@ -383,6 +383,14 @@ def seed(reset: bool = False) -> None:
             content_by_title[item.title] = item
 
         # 4) Meditações guiadas.
+        cover_for_meditation = {
+            "Meditação Zen da Manhã": "montanha_ao_amanhecer",
+            "Meditação Guiada: Enraizamento": "rio_entre_pedras",
+            "Meditação do Silêncio Interior": "caverna_do_silencio",
+            "Meditação Vipassana: Observação": "ceu_aberto",
+            "Meditação Metta: Compaixão Infinita": "aurora_dourada",
+            "Meditação Body Scan Profundo": "lago_sob_neblina",
+        }
         for title, desc, axes, moods, duration, audio_file in MEDITATION_ITEMS:
             item = ContentItem(
                 title=title,
@@ -393,6 +401,7 @@ def seed(reset: bool = False) -> None:
                 duration_seconds=duration,
                 energy_level=1,
                 published_at=NOW,
+                cover_image_id=images_by_slug[cover_for_meditation[title]].id if title in cover_for_meditation else None,
             )
             db.add(item)
             db.flush()
@@ -410,6 +419,14 @@ def seed(reset: bool = False) -> None:
             content_by_title[title] = item
 
         # 5) Sons da natureza (soundscapes).
+        cover_for_soundscape = {
+            "Sons da Floresta Tropical": "floresta_azul",
+            "Chuva Relaxante": "lago_sob_neblina",
+            "Oceano ao Amanhecer": "oceano_calmo",
+            "Floresta de Pinheiros à Noite": "ceu_estrelado",
+            "Ribeirão Cristalino": "rio_entre_pedras",
+            "Tempestade Distante": "caverna_do_silencio",
+        }
         for title, desc, axes, moods, duration, audio_file in SOUNDSCAPE_ITEMS:
             item = ContentItem(
                 title=title,
@@ -420,6 +437,7 @@ def seed(reset: bool = False) -> None:
                 duration_seconds=duration,
                 energy_level=1,
                 published_at=NOW,
+                cover_image_id=images_by_slug[cover_for_soundscape[title]].id if title in cover_for_soundscape else None,
             )
             db.add(item)
             db.flush()
@@ -437,6 +455,12 @@ def seed(reset: bool = False) -> None:
             content_by_title[title] = item
 
         # 6) Música ambiente e harmonia.
+        cover_for_music = {
+            "Harmonia Celestial": "ceu_estrelado",
+            "Acordes da Cura": "chama_da_vela",
+            "Piano Meditativo": "aurora_dourada",
+            "Cristais Cantadores": "ceu_aberto",
+        }
         for title, desc, axes, moods, duration, audio_file in MUSIC_ITEMS:
             item = ContentItem(
                 title=title,
@@ -447,6 +471,7 @@ def seed(reset: bool = False) -> None:
                 duration_seconds=duration,
                 energy_level=1,
                 published_at=NOW,
+                cover_image_id=images_by_slug[cover_for_music[title]].id if title in cover_for_music else None,
             )
             db.add(item)
             db.flush()
@@ -464,6 +489,11 @@ def seed(reset: bool = False) -> None:
             content_by_title[title] = item
 
         # 7) Práticas de respiração (visuais, sem áudio).
+        cover_for_breathing = {
+            "Respiração 4-7-8": "chama_da_vela",
+            "Respiração Fluida 4-4-6": "rio_entre_pedras",
+            "Respiração Quadrada 4-4-4-4": "montanha_ao_amanhecer",
+        }
         breathing_by_pattern: dict[str, ContentItem] = {}
         for title, desc, axes, moods, duration, pattern in BREATHING_ITEMS:
             item = ContentItem(
@@ -475,6 +505,7 @@ def seed(reset: bool = False) -> None:
                 duration_seconds=duration,
                 energy_level=1,
                 published_at=NOW,
+                cover_image_id=images_by_slug[cover_for_breathing[title]].id if title in cover_for_breathing else None,
             )
             db.add(item)
             db.flush()

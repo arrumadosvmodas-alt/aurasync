@@ -24,7 +24,7 @@ if (Platform.OS === 'android') {
   }
 }
 
-const CATEGORIES = ['Todos', 'Natureza', 'Binaural', 'Meditação', 'Respiração'];
+const CATEGORIES = ['Todos', 'Natureza', 'Binaural', 'Meditação', 'Respiração', 'Música'];
 
 export function ExploreScreen({ route }: any) {
   const { openPlayer } = useApp();
@@ -40,6 +40,8 @@ export function ExploreScreen({ route }: any) {
       ? 'Meditação'
       : initialCategory === 'breathing'
       ? 'Respiração'
+      : initialCategory === 'music'
+      ? 'Música'
       : 'Todos'
   );
   
@@ -71,6 +73,8 @@ export function ExploreScreen({ route }: any) {
           ? 'Meditação'
           : cat === 'breathing'
           ? 'Respiração'
+          : cat === 'music'
+          ? 'Música'
           : 'Todos'
       );
     }
@@ -166,6 +170,7 @@ export function ExploreScreen({ route }: any) {
     'Binaural': 'binaural',
     'Meditação': 'meditation',
     'Respiração': 'breathing',
+    'Música': 'music',
   };
 
   const filteredSessions = items
@@ -331,6 +336,8 @@ export function ExploreScreen({ route }: any) {
                         ? 'Binaural'
                         : item.type === 'breathing'
                         ? 'Respiração'
+                        : item.type === 'music'
+                        ? 'Música'
                         : 'Meditação'}{' '}
                       • {item.duration_seconds ? `${Math.round(item.duration_seconds / 60)} min` : 'Duração variada'}
                     </Text>

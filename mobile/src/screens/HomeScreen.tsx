@@ -232,6 +232,8 @@ export function HomeScreen() {
                       ? 'tree'
                       : rec.item.type === 'binaural'
                       ? 'waveform'
+                      : rec.item.type === 'music'
+                      ? 'music'
                       : 'spa') as any
                   }
                   size={18}
@@ -249,6 +251,8 @@ export function HomeScreen() {
                     ? 'Binaural'
                     : rec.item.type === 'breathing'
                     ? 'Respiração'
+                    : rec.item.type === 'music'
+                    ? 'Música'
                     : 'Meditação'}{' '}
                   • Eixo: {rec.item.spiritual_axis?.[0] || 'Geral'}
                 </Text>
