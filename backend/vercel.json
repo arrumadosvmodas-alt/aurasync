@@ -1,0 +1,14 @@
+{
+  "buildCommand": "pip install -r requirements.txt && alembic upgrade head",
+  "startCommand": "uvicorn app.main:app --host 0.0.0.0 --port $PORT",
+  "env": {
+    "PYTHONUNBUFFERED": "1",
+    "DATABASE_URL": "@DATABASE_URL"
+  },
+  "functions": {
+    "app/main.py": {
+      "memory": 1024,
+      "maxDuration": 30
+    }
+  }
+}
