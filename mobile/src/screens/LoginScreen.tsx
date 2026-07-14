@@ -13,7 +13,7 @@ import {
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 import { useApp } from '../context/AppContext';
-import { colors, rounded, typography } from '../theme';
+import { typography } from '../theme';
 
 export function LoginScreen() {
   const { login, register, setUserRole } = useApp();
@@ -26,15 +26,31 @@ export function LoginScreen() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const switchMode = (nextMode: 'login' | 'register') => {
+    setMode(nextMode);
+    setError(null);
+    setIsAdmin(false);
+  };
+
   const submit = async () => {
     setBusy(true);
     setError(null);
     try {
+      if (mode === 'register') {
+        const normalizedCpf = cpf.replace(/\D/g, '');
+        if (!name.trim()) throw new Error('Informe seu nome completo.');
+        if (normalizedCpf.length !== 11) throw new Error('Informe um CPF com 11 digitos.');
+        if (password.length < 8) throw new Error('A senha deve ter pelo menos 8 caracteres.');
+        await register(name, normalizedCpf, password, username.includes('@') ? username : undefined);
+        return;
+      }
+
+      if (!username.trim()) throw new Error('Informe seu e-mail ou usuario.');
       const email = username.includes('@') ? username.trim() : `${username.trim().toLowerCase()}@aurasync.com`;
       await login(email, password, isAdmin);
       setUserRole(isAdmin ? 'admin' : 'user');
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Falha na autenticação');
+      setError(e instanceof Error ? e.message : 'Falha na autenticacao');
     } finally {
       setBusy(false);
     }
@@ -53,19 +69,61 @@ export function LoginScreen() {
             color="#7DA083"
             style={styles.logoIcon}
           />
-          
+
           <Text style={styles.title}>AURA SYNC</Text>
-          <Text style={styles.subtitle}>Monorepo de 3 Camadas Integradas</Text>
+          <Text style={styles.subtitle}>Entre ou crie sua conta AuraSync</Text>
+
+          <View style={styles.modeRow}>
+            <Pressable
+              style={[styles.modeButton, mode === 'login' && styles.modeButtonActive]}
+              onPress={() => switchMode('login')}
+            >
+              <Text style={[styles.modeButtonText, mode === 'login' && styles.modeButtonTextActive]}>Entrar</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.modeButton, mode === 'register' && styles.modeButtonActive]}
+              onPress={() => switchMode('register')}
+            >
+              <Text style={[styles.modeButtonText, mode === 'register' && styles.modeButtonTextActive]}>Criar conta</Text>
+            </Pressable>
+          </View>
 
           <View style={styles.form}>
-            <Text style={styles.label}>Nome de Usuário</Text>
+            {mode === 'register' ? (
+              <>
+                <Text style={styles.label}>Nome completo</Text>
+                <TextInput
+                  style={styles.input}
+                  value={name}
+                  onChangeText={setName}
+                  placeholder="Digite seu nome"
+                  placeholderTextColor="#797869"
+                  autoCapitalize="words"
+                  testID="name_input"
+                />
+
+                <Text style={styles.label}>CPF</Text>
+                <TextInput
+                  style={styles.input}
+                  value={cpf}
+                  onChangeText={setCpf}
+                  placeholder="000.000.000-00"
+                  placeholderTextColor="#797869"
+                  keyboardType="number-pad"
+                  testID="cpf_input"
+                />
+              </>
+            ) : null}
+
+            <Text style={styles.label}>{mode === 'register' ? 'E-mail (opcional)' : 'E-mail ou usuario'}</Text>
             <TextInput
               style={styles.input}
               value={username}
               onChangeText={setUsername}
-              placeholder="Digite seu usuário..."
+              placeholder={mode === 'register' ? 'email@exemplo.com' : 'Digite seu usuario...'}
               placeholderTextColor="#797869"
               autoCapitalize="none"
+              keyboardType="email-address"
               testID="username_input"
             />
 
@@ -81,22 +139,20 @@ export function LoginScreen() {
             />
 
             {mode === 'login' ? (
-            <Pressable
-              style={styles.checkboxContainer}
-              onPress={() => setIsAdmin(!isAdmin)}
-            >
-              <View style={[styles.checkbox, isAdmin && styles.checkboxChecked]}>
-                {isAdmin && (
-                  <MaterialCommunityIcons name="check" size={16} color="#FFFFFF" />
-                )}
-              </View>
-              <View style={styles.checkboxLabelContainer}>
-                <Text style={styles.checkboxTitle}>Simular Perfil Admin (CMS)</Text>
-                <Text style={styles.checkboxSubtitle}>
-                  Permite CRUD e validação de licenças
-                </Text>
-              </View>
-            </Pressable>
+              <Pressable
+                style={styles.checkboxContainer}
+                onPress={() => setIsAdmin(!isAdmin)}
+              >
+                <View style={[styles.checkbox, isAdmin && styles.checkboxChecked]}>
+                  {isAdmin && (
+                    <MaterialCommunityIcons name="check" size={16} color="#FFFFFF" />
+                  )}
+                </View>
+                <View style={styles.checkboxLabelContainer}>
+                  <Text style={styles.checkboxTitle}>Simular Perfil Admin (CMS)</Text>
+                  <Text style={styles.checkboxSubtitle}>Permite CRUD e validacao de licencas</Text>
+                </View>
+              </Pressable>
             ) : null}
 
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
@@ -105,7 +161,7 @@ export function LoginScreen() {
               style={styles.button}
               onPress={submit}
               disabled={busy}
-              testID="login_button"
+              testID={mode === 'register' ? 'register_button' : 'login_button'}
             >
               {busy ? (
                 <ActivityIndicator color="#FFFFFF" />
@@ -123,7 +179,7 @@ export function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FBF9F1', // Light warm cream background matching cosmic linear gradient base
+    backgroundColor: '#FBF9F1',
   },
   scrollContent: {
     flexGrow: 1,
@@ -133,11 +189,11 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '100%',
-    maxWidth: 360,
-    backgroundColor: 'rgba(230, 225, 212, 0.95)', // Color(0xFFE6E1D4).copy(alpha = 0.95f)
+    maxWidth: 420,
+    backgroundColor: 'rgba(230, 225, 212, 0.95)',
     borderRadius: 24,
     borderWidth: 0.5,
-    borderColor: 'rgba(168, 181, 158, 0.5)', // Color(0xFFA8B59E).copy(alpha = 0.5f)
+    borderColor: 'rgba(168, 181, 158, 0.5)',
     padding: 24,
     alignItems: 'center',
     shadowColor: '#141E0D',
@@ -234,7 +290,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   checkboxChecked: {
-    backgroundColor: '#7DA083', // Color(0xFF7DA083)
+    backgroundColor: '#7DA083',
     borderColor: '#7DA083',
   },
   checkboxLabelContainer: {
@@ -262,7 +318,7 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
     height: 48,
-    backgroundColor: '#141E0D', // Color(0xFF141E0D)
+    backgroundColor: '#141E0D',
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
