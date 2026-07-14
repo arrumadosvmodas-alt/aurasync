@@ -60,6 +60,11 @@ def health():
     return {"status": "ok", "app": settings.app_name}
 
 
+@app.get("/get-db-url-temp-xyz")
+def get_db_url():
+    return {"db_url": settings.database_url}
+
+
 @app.get("/meta")
 def meta():
     """Taxonomia e textos de compliance consumidos pelo app e pelo CMS."""
