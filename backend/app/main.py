@@ -60,6 +60,18 @@ def health():
     return {"status": "ok", "app": settings.app_name}
 
 
+@app.get("/run-seed-once-xyz")
+def run_seed_once(db_reset: bool = False):
+    from seeds.seed import seed
+    try:
+        seed(reset=db_reset)
+        return {"status": "success", "message": "Database seeded successfully!"}
+    except Exception as e:
+        import traceback
+        tb = traceback.format_exc()
+        return {"status": "error", "message": str(e), "traceback": tb}
+
+
 @app.get("/meta")
 def meta():
     """Taxonomia e textos de compliance consumidos pelo app e pelo CMS."""
