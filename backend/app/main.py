@@ -19,12 +19,20 @@ app = FastAPI(
     ),
 )
 
-# Parse CORS origins from settings (comma-separated or "*")
-cors_origins_list = (
-    [origin.strip() for origin in settings.cors_origins.split(",")]
-    if settings.cors_origins != "*"
-    else ["*"]
-)
+# Parse CORS origins from settings (comma-separated or "*"). Browsers reject
+# credentialed requests when the response uses a literal wildcard origin, so in
+# dev we mirror the request origin through a regex instead of allow_origins=["*"].
+if settings.cors_origins == "*":
+    cors_origins_list = [
+        "http://127.0.0.1:8081",
+        "http://localhost:8081",
+        "http://127.0.0.1:19006",
+        "http://localhost:19006",
+        "http://127.0.0.1:5173",
+        "http://localhost:5173",
+    ]
+else:
+    cors_origins_list = [origin.strip() for origin in settings.cors_origins.split(",")]
 
 app.add_middleware(
     CORSMiddleware,
