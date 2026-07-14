@@ -3,11 +3,11 @@ import { Platform } from 'react-native';
 import { FALLBACK_CATALOG, FALLBACK_COMPLETE_CATALOG, FALLBACK_RECOMMENDATIONS } from './fallbackCatalog';
 
 // Ler URL da API via variável de ambiente EXPO_PUBLIC_API_URL
-// Default: http://localhost:8010 ou http://10.0.2.2:8010 no Android (dev local)
+// Default: http://localhost:8000 ou http://10.0.2.2:8000 no Android (dev local)
 // Produção: https://aurasync-api.vercel.app (ou URL do seu backend)
 export const API_BASE =
   process.env.EXPO_PUBLIC_API_URL ||
-  (Platform.OS === 'android' ? 'http://10.0.2.2:8010' : 'http://localhost:8010');
+  (Platform.OS === 'android' ? 'http://10.0.2.2:8000' : 'http://localhost:8000');
 
 export interface ImageAsset {
   id: string;
@@ -156,7 +156,10 @@ export interface CompleteCatalog {
 }
 
 
+const OFFLINE_FALLBACKS_ENABLED = process.env.EXPO_PUBLIC_ENABLE_OFFLINE_FALLBACKS === '1';
+
 function fallbackForPath<T>(path: string): T | null {
+  if (!OFFLINE_FALLBACKS_ENABLED) return null;
   if (path.startsWith('/catalog/complete')) return FALLBACK_COMPLETE_CATALOG as T;
   if (path.startsWith('/catalog')) return FALLBACK_CATALOG as T;
   if (path.startsWith('/recommendations')) return FALLBACK_RECOMMENDATIONS as T;
@@ -196,14 +199,15 @@ export async function api<T = unknown>(
   } catch (error) {
     const fallback = fallbackForPath<T>(path);
     if (fallback) return fallback;
-    throw error;
+    const message = error instanceof Error ? error.message : 'falha de rede';
+    throw new Error(`Nao foi possivel conectar a API em ${API_BASE}. Verifique EXPO_PUBLIC_API_URL e se o backend esta online. Detalhe: ${message}`);
   }
 
   if (!resp.ok) {
     const fallback = fallbackForPath<T>(path);
     if (fallback) return fallback;
 
-    let detail = (await apiIdentityError(path, resp.status)) || `HTTP ${resp.status}`;
+    let detail = (await apiIdentityError(path, resp.status)) || `API ${API_BASE}${path} retornou HTTP ${resp.status}`;
     try {
       const data = await resp.json();
       if (typeof data.detail === 'string') detail = data.detail;

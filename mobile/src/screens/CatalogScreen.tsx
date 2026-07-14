@@ -346,6 +346,21 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontFamily: typography.labelSm.fontFamily,
   },
+  retryButton: {
+    marginTop: 16,
+    minHeight: 44,
+    paddingHorizontal: 18,
+    borderRadius: 8,
+    backgroundColor: '#141E0D',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  retryButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '700',
+    fontFamily: typography.labelMd.fontFamily,
+  },
   error: {
     fontSize: 16,
     color: '#D0902F',

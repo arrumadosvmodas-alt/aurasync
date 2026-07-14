@@ -69,18 +69,24 @@ export default function App() {
   const load = async () => {
     if (!logged) return;
     setLoading(true);
+    setError(null);
     try {
       const [itemsData, usersData, meData] = await Promise.all([
-        adminApi<ContentItem[]>('/admin/content').catch(() => []),
-        adminApi<User[]>('/admin/users').catch(() => []),
-        adminApi<User>('/auth/me').catch(() => null),
+        adminApi<ContentItem[]>('/admin/content'),
+        adminApi<User[]>('/admin/users'),
+        adminApi<User>('/auth/me'),
       ]);
-      setItems(itemsData || []);
-      setUsers(usersData || []);
+      setItems(itemsData);
+      setUsers(usersData);
       setCurrentUser(meData);
-      setError(null);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Erro ao carregar dados');
+      const message = e instanceof Error ? e.message : 'Erro ao carregar dados';
+      setError(message);
+      if (message.includes('401') || message.toLowerCase().includes('unauthorized')) {
+        clearAdminToken();
+        setLogged(false);
+        setCurrentUser(null);
+      }
     } finally {
       setLoading(false);
     }
@@ -139,7 +145,11 @@ export default function App() {
         </button>
       </div>
 
-      {error ? <p className="error" style={{ marginBottom: 16 }}>{error}</p> : null}
+      {error ? (
+        <p className="error" style={{ marginBottom: 16 }}>
+          {error} <button className="secondary" onClick={load}>Tentar novamente</button>
+        </p>
+      ) : null}
 
       {tab === 'content' ? (
         <>

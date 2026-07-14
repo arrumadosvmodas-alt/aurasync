@@ -58,8 +58,12 @@ export function ImmersivePlayer() {
     let unmounted = false;
 
     (async () => {
-      if (!resolvedAudioUrl) return;
+      if (!resolvedAudioUrl) {
+        setError('Este conteudo ainda nao possui audio publicado.');
+        return;
+      }
       try {
+        setError(null);
         await Audio.setAudioModeAsync({ playsInSilentModeIOS: true });
         const { sound } = await Audio.Sound.createAsync(
           { uri: resolvedAudioUrl },
@@ -196,7 +200,10 @@ export function ImmersivePlayer() {
 
   const togglePlay = async () => {
     const sound = soundRef.current;
-    if (!sound) return;
+    if (!sound) {
+      setError((current) => current || 'Audio ainda nao carregado.');
+      return;
+    }
     if (playing) {
       await sound.pauseAsync();
       setPlaying(false);
@@ -500,6 +507,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
+  },
+  playerError: {
+    fontSize: 12,
+    color: '#EF4444',
+    textAlign: 'center',
+    marginBottom: 8,
+    fontFamily: typography.bodyMd.fontFamily,
   },
   audioLoopLabel: {
     fontSize: 10,

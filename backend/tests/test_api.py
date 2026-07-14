@@ -86,3 +86,34 @@ def test_onboarding_valida_objetivo(client, auth_headers):
         "/onboarding", json={"primary_goal": "curar_ansiedade"}, headers=auth_headers
     )
     assert resp.status_code == 422
+
+
+def test_catalogo_completo_retorna_midias_publicadas(client, admin_headers):
+    item = client.post(
+        "/admin/content",
+        json={"title": "Audio Publicado", "type": "music", "spiritual_axis": ["air"]},
+        headers=admin_headers,
+    ).json()
+    audio = client.post(
+        f"/admin/content/{item['id']}/audio",
+        json={"storage_path": "audio/audio-publicado.wav", "format": "wav"},
+        headers=admin_headers,
+    ).json()
+    client.post(
+        "/admin/licenses",
+        json={
+            "asset_type": "audio",
+            "asset_id": audio["id"],
+            "source_name": "AuraSync",
+            "license_name": "Proprietary",
+        },
+        headers=admin_headers,
+    )
+    assert client.post(f"/admin/content/{item['id']}/publish", headers=admin_headers).status_code == 200
+
+    catalog = client.get("/catalog/complete").json()
+    music_items = catalog["catalog"]["music"]["items"]
+    published = next(entry for entry in music_items if entry["id"] == item["id"])
+
+    assert published["audio"][0]["url"].endswith("/media/audio/audio-publicado.wav")
+    assert catalog["summary"]["breakdown_by_type"]["music"] >= 1

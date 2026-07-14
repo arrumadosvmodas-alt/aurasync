@@ -1,138 +1,126 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload, selectinload
 
 from .serializers import serialize_content, serialize_image
 from ..db import get_db
-from ..models import ContentItem, ImageAsset, Playlist
+from ..models import ContentItem, ImageAsset, Playlist, PlaylistItem
 from ..schemas.schemas import ContentItemOut, ImageAssetOut
 
 router = APIRouter(tags=["catalog"])
 
+CONTENT_TYPES = ("binaural", "meditation", "soundscape", "music", "breathing")
+
+
+def _content_options():
+    return (
+        selectinload(ContentItem.audio_assets),
+        joinedload(ContentItem.cover_image),
+        joinedload(ContentItem.binaural_params),
+    )
+
+
+def _published_content_query():
+    return (
+        select(ContentItem)
+        .options(*_content_options())
+        .where(
+            ContentItem.is_active.is_(True),
+            ContentItem.published_at.is_not(None),
+        )
+    )
+
 
 @router.get("/catalog/complete")
 def get_complete_catalog(db: Session = Depends(get_db)):
-    """Retorna o catálogo completo organizado por categoria com imagens, músicas, sons e meditações"""
+    """Return the full catalog grouped by category."""
 
-    # Buscar todos os itens por tipo
-    binaural_items = db.execute(
-        select(ContentItem).where(
-            ContentItem.type == 'binaural',
-            ContentItem.is_active.is_(True),
-            ContentItem.published_at.is_not(None)
-        )
-    ).scalars().all()
+    content_items = db.execute(_published_content_query()).scalars().unique().all()
+    by_type = {content_type: [] for content_type in CONTENT_TYPES}
+    for item in content_items:
+        if item.type in by_type:
+            by_type[item.type].append(item)
 
-    meditation_items = db.execute(
-        select(ContentItem).where(
-            ContentItem.type == 'meditation',
-            ContentItem.is_active.is_(True),
-            ContentItem.published_at.is_not(None)
-        )
-    ).scalars().all()
-
-    soundscape_items = db.execute(
-        select(ContentItem).where(
-            ContentItem.type == 'soundscape',
-            ContentItem.is_active.is_(True),
-            ContentItem.published_at.is_not(None)
-        )
-    ).scalars().all()
-
-    music_items = db.execute(
-        select(ContentItem).where(
-            ContentItem.type == 'music',
-            ContentItem.is_active.is_(True),
-            ContentItem.published_at.is_not(None)
-        )
-    ).scalars().all()
-
-    breathing_items = db.execute(
-        select(ContentItem).where(
-            ContentItem.type == 'breathing',
-            ContentItem.is_active.is_(True),
-            ContentItem.published_at.is_not(None)
-        )
-    ).scalars().all()
-
-    # Buscar imagens
     images = db.execute(select(ImageAsset)).scalars().all()
-
-    # Buscar playlists
-    playlists = db.execute(select(Playlist)).scalars().all()
+    playlists = db.execute(
+        select(Playlist).options(selectinload(Playlist.items))
+    ).scalars().unique().all()
 
     return {
         "catalog": {
             "binaural": {
-                "name": "Sessões Binaurais",
+                "name": "Sessoes Binaurais",
                 "icon": "waveform",
-                "description": "Batidas de frequências específicas para estados mentais",
-                "count": len(binaural_items),
-                "items": [serialize_content(db, item) for item in binaural_items]
+                "description": "Batidas de frequencias especificas para estados mentais",
+                "count": len(by_type["binaural"]),
+                "items": [serialize_content(db, item) for item in by_type["binaural"]],
             },
             "meditation": {
-                "name": "Meditações Guiadas",
+                "name": "Meditacoes Guiadas",
                 "icon": "spa",
-                "description": "Práticas meditativas orientadas com durações variadas",
-                "count": len(meditation_items),
-                "items": [serialize_content(db, item) for item in meditation_items]
+                "description": "Praticas meditativas orientadas com duracoes variadas",
+                "count": len(by_type["meditation"]),
+                "items": [serialize_content(db, item) for item in by_type["meditation"]],
             },
             "soundscape": {
                 "name": "Sons da Natureza",
                 "icon": "tree",
-                "description": "Ambientes sonoros naturais para relaxamento e imersão",
-                "count": len(soundscape_items),
-                "items": [serialize_content(db, item) for item in soundscape_items]
+                "description": "Ambientes sonoros naturais para relaxamento e imersao",
+                "count": len(by_type["soundscape"]),
+                "items": [serialize_content(db, item) for item in by_type["soundscape"]],
             },
             "music": {
-                "name": "Música Ambiente",
+                "name": "Musica Ambiente",
                 "icon": "music",
-                "description": "Composições harmônicas para relaxamento e expansão",
-                "count": len(music_items),
-                "items": [serialize_content(db, item) for item in music_items]
+                "description": "Composicoes harmonicas para relaxamento e expansao",
+                "count": len(by_type["music"]),
+                "items": [serialize_content(db, item) for item in by_type["music"]],
             },
             "breathing": {
-                "name": "Práticas de Respiração",
+                "name": "Praticas de Respiracao",
                 "icon": "weather-windy",
-                "description": "Exercícios respiratórios com técnicas específicas",
-                "count": len(breathing_items),
-                "items": [serialize_content(db, item) for item in breathing_items]
-            }
+                "description": "Exercicios respiratorios com tecnicas especificas",
+                "count": len(by_type["breathing"]),
+                "items": [serialize_content(db, item) for item in by_type["breathing"]],
+            },
         },
         "images": {
             "name": "Imagens Contemplativas",
             "icon": "image",
-            "description": "Gradientes simbólicos para cada eixo espiritual",
+            "description": "Gradientes simbolicos para cada eixo espiritual",
             "count": len(images),
-            "items": [serialize_image(db, img) for img in images]
+            "items": [serialize_image(db, img) for img in images],
         },
         "playlists": {
-            "name": "Playlists Temáticas",
+            "name": "Playlists Tematicas",
             "icon": "playlist-music",
-            "description": "Seleções curatorias para diferentes contextos",
+            "description": "Selecoes curatoriais para diferentes contextos",
             "count": len(playlists),
-            "items": [{
-                "id": p.id,
-                "title": p.title,
-                "description": p.description,
-                "item_count": len(p.items),
-                "is_premium": p.is_premium
-            } for p in playlists]
+            "items": [
+                {
+                    "id": p.id,
+                    "title": p.title,
+                    "description": p.description,
+                    "item_count": len(p.items),
+                    "is_premium": p.is_premium,
+                }
+                for p in playlists
+            ],
         },
         "summary": {
-            "total_content_items": len(binaural_items) + len(meditation_items) + len(soundscape_items) + len(music_items) + len(breathing_items),
+            "total_content_items": sum(len(items) for items in by_type.values()),
             "breakdown_by_type": {
-                "binaural": len(binaural_items),
-                "meditation": len(meditation_items),
-                "soundscape": len(soundscape_items),
-                "music": len(music_items),
-                "breathing": len(breathing_items)
+                "binaural": len(by_type["binaural"]),
+                "meditation": len(by_type["meditation"]),
+                "soundscape": len(by_type["soundscape"]),
+                "music": len(by_type["music"]),
+                "breathing": len(by_type["breathing"]),
             },
             "total_images": len(images),
             "total_playlists": len(playlists),
             "total_categories": 7,
-            "storage_size_mb": 220
-        }
+            "storage_size_mb": 220,
+        },
     }
 
 
@@ -145,9 +133,7 @@ def list_catalog(
     include_premium: bool = True,
     db: Session = Depends(get_db),
 ):
-    query = select(ContentItem).where(
-        ContentItem.is_active.is_(True), ContentItem.published_at.is_not(None)
-    )
+    query = _published_content_query()
     if type:
         query = query.where(ContentItem.type == type)
     if max_duration:
@@ -155,8 +141,7 @@ def list_catalog(
     if not include_premium:
         query = query.where(ContentItem.is_premium.is_(False))
 
-    items = db.execute(query).scalars().all()
-    # Filtros de JSON (eixo/mood) em Python: portável entre SQLite e Postgres.
+    items = db.execute(query).scalars().unique().all()
     if axis:
         items = [i for i in items if axis in (i.spiritual_axis or [])]
     if mood:
@@ -166,9 +151,13 @@ def list_catalog(
 
 @router.get("/catalog/{item_id}", response_model=ContentItemOut)
 def get_content(item_id: str, db: Session = Depends(get_db)):
-    item = db.get(ContentItem, item_id)
+    item = db.execute(
+        select(ContentItem)
+        .options(*_content_options())
+        .where(ContentItem.id == item_id)
+    ).scalar_one_or_none()
     if item is None or not item.is_active:
-        raise HTTPException(404, "Conteúdo não encontrado")
+        raise HTTPException(404, "Conteudo nao encontrado")
     return serialize_content(db, item)
 
 
@@ -186,7 +175,9 @@ def list_images(
 
 @router.get("/playlists")
 def list_playlists(db: Session = Depends(get_db)):
-    playlists = db.execute(select(Playlist)).scalars().all()
+    playlists = db.execute(
+        select(Playlist).options(selectinload(Playlist.items))
+    ).scalars().unique().all()
     return [
         {
             "id": p.id,
@@ -201,9 +192,17 @@ def list_playlists(db: Session = Depends(get_db)):
 
 @router.get("/playlists/{playlist_id}")
 def get_playlist(playlist_id: str, db: Session = Depends(get_db)):
-    p = db.get(Playlist, playlist_id)
+    p = db.execute(
+        select(Playlist)
+        .options(
+            selectinload(Playlist.items)
+            .joinedload(PlaylistItem.content_item)
+            .options(*_content_options())
+        )
+        .where(Playlist.id == playlist_id)
+    ).scalar_one_or_none()
     if p is None:
-        raise HTTPException(404, "Playlist não encontrada")
+        raise HTTPException(404, "Playlist nao encontrada")
     return {
         "id": p.id,
         "title": p.title,

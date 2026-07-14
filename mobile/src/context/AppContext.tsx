@@ -52,7 +52,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [prefs, setPrefs] = useState<Preferences | null>(null);
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState<PlayerSession | null>(null);
-  const [userRole, setUserRole] = useState<string>('admin');
+  const [userRole, setUserRole] = useState<string>('user');
 
   useEffect(() => {
     (async () => {
@@ -90,21 +90,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const login = useCallback(
     async (loginEmail: string, password: string, isAdmin?: boolean) => {
-      let accessToken: string;
-      try {
-        const resp = await api<{ access_token: string; refresh_token?: string }>(
-          '/auth/login',
-          {
-            method: 'POST',
-            body: { email: loginEmail, password },
-          },
-        );
-        accessToken = resp.access_token;
-      } catch {
-        accessToken = `mock_${Date.now()}`;
-      }
-      await persist(accessToken, loginEmail);
-      if (isAdmin) setUserRole('admin');
+      const resp = await api<{ access_token: string; refresh_token?: string }>(
+        '/auth/login',
+        {
+          method: 'POST',
+          body: { email: loginEmail, password },
+        },
+      );
+      await persist(resp.access_token, loginEmail);
+      setUserRole(isAdmin ? 'admin' : 'user');
     },
     [persist],
   );
@@ -134,16 +128,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const saveOnboarding = useCallback(
     async (newPrefs: Preferences) => {
-      try {
-        const saved = await api<Preferences>('/onboarding', {
-          method: 'POST',
-          body: newPrefs,
-          token,
-        });
-        setPrefs(saved);
-      } catch {
-        setPrefs(newPrefs);
+      if (!token) {
+        throw new Error('Sessao expirada. Entre novamente para salvar suas preferencias.');
       }
+      const saved = await api<Preferences>('/onboarding', {
+        method: 'POST',
+        body: newPrefs,
+        token,
+      });
+      setPrefs(saved);
     },
     [token],
   );

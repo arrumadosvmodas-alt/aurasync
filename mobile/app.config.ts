@@ -2,7 +2,7 @@ import { ExpoConfig } from 'expo/config';
 
 // Exposer variáveis de ambiente ao app via EXPO_PUBLIC_*
 // Leia via: process.env.EXPO_PUBLIC_API_URL
-const apiUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8010';
+const apiUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8000';
 
 const config: ExpoConfig = {
   name: 'AuraSync',
