@@ -27,11 +27,15 @@ def _media_url(storage_path: str | None) -> str | None:
 
 
 def _attribution_for(db: Session, asset_type: str, asset_id: str) -> str | None:
-    lic = db.execute(
-        select(AssetLicense).where(
-            AssetLicense.asset_type == asset_type, AssetLicense.asset_id == asset_id
-        )
-    ).scalar_one_or_none()
+    # Cache local por sessão/requisição para evitar problema N+1 sobre conexões lentas
+    if not hasattr(db, "_license_cache"):
+        try:
+            all_lics = db.execute(select(AssetLicense)).scalars().all()
+            db._license_cache = {(l.asset_type, l.asset_id): l for l in all_lics}
+        except Exception:
+            db._license_cache = {}
+            
+    lic = db._license_cache.get((asset_type, asset_id))
     if lic is None or not lic.attribution_required:
         return None
     return lic.attribution_text or f"{lic.author_name or lic.source_name} — {lic.license_name}"
