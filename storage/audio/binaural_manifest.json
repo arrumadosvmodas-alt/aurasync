@@ -17,7 +17,15 @@
     "file": "portal_da_calma.wav",
     "beat_hz": 7.0,
     "duration_seconds": 60,
-    "sample_rate": 44100
+    "sample_rate": 44100,
+    "license": {
+      "source_name": "AuraSync (conteúdo próprio)",
+      "author_name": "AuraSync",
+      "license_name": "Proprietary (obra própria)",
+      "attribution_required": false,
+      "commercial_use_allowed": true,
+      "derivative_allowed": true
+    }
   },
   {
     "slug": "aguas_profundas",
@@ -38,7 +46,15 @@
     "file": "aguas_profundas.wav",
     "beat_hz": 4.0,
     "duration_seconds": 60,
-    "sample_rate": 44100
+    "sample_rate": 44100,
+    "license": {
+      "source_name": "AuraSync (conteúdo próprio)",
+      "author_name": "AuraSync",
+      "license_name": "Proprietary (obra própria)",
+      "attribution_required": false,
+      "commercial_use_allowed": true,
+      "derivative_allowed": true
+    }
   },
   {
     "slug": "clareira_do_foco",
@@ -58,7 +74,15 @@
     "file": "clareira_do_foco.wav",
     "beat_hz": 14.0,
     "duration_seconds": 60,
-    "sample_rate": 44100
+    "sample_rate": 44100,
+    "license": {
+      "source_name": "AuraSync (conteúdo próprio)",
+      "author_name": "AuraSync",
+      "license_name": "Proprietary (obra própria)",
+      "attribution_required": false,
+      "commercial_use_allowed": true,
+      "derivative_allowed": true
+    }
   },
   {
     "slug": "raiz_da_montanha",
@@ -79,7 +103,15 @@
     "file": "raiz_da_montanha.wav",
     "beat_hz": 6.0,
     "duration_seconds": 60,
-    "sample_rate": 44100
+    "sample_rate": 44100,
+    "license": {
+      "source_name": "AuraSync (conteúdo próprio)",
+      "author_name": "AuraSync",
+      "license_name": "Proprietary (obra própria)",
+      "attribution_required": false,
+      "commercial_use_allowed": true,
+      "derivative_allowed": true
+    }
   },
   {
     "slug": "silencio_expandido",
@@ -100,6 +132,98 @@
     "file": "silencio_expandido.wav",
     "beat_hz": 3.0,
     "duration_seconds": 60,
-    "sample_rate": 44100
+    "sample_rate": 44100,
+    "license": {
+      "source_name": "AuraSync (conteúdo próprio)",
+      "author_name": "AuraSync",
+      "license_name": "Proprietary (obra própria)",
+      "attribution_required": false,
+      "commercial_use_allowed": true,
+      "derivative_allowed": true
+    }
+  },
+  {
+    "slug": "criatividade_fluida",
+    "title": "Criatividade Fluida",
+    "left_hz": 160.0,
+    "right_hz": 170.0,
+    "noise": "pink",
+    "axes": [
+      "air",
+      "light"
+    ],
+    "moods": [
+      "creative",
+      "airy"
+    ],
+    "description": "Batida percebida de 10 Hz sobre ruído rosa. Estímulo à criatividade e fluidez mental.",
+    "file": "criatividade_fluida.wav",
+    "beat_hz": 10.0,
+    "duration_seconds": 60,
+    "sample_rate": 44100,
+    "license": {
+      "source_name": "AuraSync (conteúdo próprio)",
+      "author_name": "AuraSync",
+      "license_name": "Proprietary (obra própria)",
+      "attribution_required": false,
+      "commercial_use_allowed": true,
+      "derivative_allowed": true
+    }
+  },
+  {
+    "slug": "despertar_cosmico",
+    "title": "Despertar Cósmico",
+    "left_hz": 432.0,
+    "right_hz": 440.0,
+    "noise": "none",
+    "axes": [
+      "ether",
+      "sky"
+    ],
+    "moods": [
+      "sacred",
+      "vast"
+    ],
+    "description": "Batida percebida de 8 Hz com base na frequência natural de 432 Hz. Conexão e transcendência.",
+    "file": "despertar_cosmico.wav",
+    "beat_hz": 8.0,
+    "duration_seconds": 60,
+    "sample_rate": 44100,
+    "license": {
+      "source_name": "AuraSync (conteúdo próprio)",
+      "author_name": "AuraSync",
+      "license_name": "Proprietary (obra própria)",
+      "attribution_required": false,
+      "commercial_use_allowed": true,
+      "derivative_allowed": true
+    }
+  },
+  {
+    "slug": "cura_profunda",
+    "title": "Cura Profunda",
+    "left_hz": 528.0,
+    "right_hz": 532.5,
+    "noise": "brown",
+    "axes": [
+      "heart",
+      "root"
+    ],
+    "moods": [
+      "calm",
+      "warm"
+    ],
+    "description": "Batida percebida de 4.5 Hz baseada na frequência de cura de 528 Hz sobre ruído marrom.",
+    "file": "cura_profunda.wav",
+    "beat_hz": 4.5,
+    "duration_seconds": 60,
+    "sample_rate": 44100,
+    "license": {
+      "source_name": "AuraSync (conteúdo próprio)",
+      "author_name": "AuraSync",
+      "license_name": "Proprietary (obra própria)",
+      "attribution_required": false,
+      "commercial_use_allowed": true,
+      "derivative_allowed": true
+    }
   }
 ]

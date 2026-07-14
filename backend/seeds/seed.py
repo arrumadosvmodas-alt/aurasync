@@ -87,43 +87,65 @@ IMAGES = [
 
 MEDITATION_ITEMS = [
     ("Meditação Zen da Manhã", "Comece seu dia com calma e presença plena.",
-     ["air", "light"], ["calm", "focused"], 600, "meditacao_zen_manha.wav"),
+     ["air", "light"], ["calm", "focused"], 600, "meditacao_zen_manha.wav", "https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav"),
     ("Meditação Guiada: Enraizamento", "Conecte-se à terra e estabilize sua energia.",
-     ["earth", "root"], ["grounded", "calm"], 900, "meditacao_enraizamento.wav"),
+     ["earth", "root"], ["grounded", "calm"], 900, "meditacao_enraizamento.wav", "https://assets.mixkit.co/active_storage/sfx/1233/1233-84.wav"),
     ("Meditação do Silêncio Interior", "Mergulhe na profundidade do seu ser.",
-     ["ether", "night"], ["deep", "contemplative"], 1200, "meditacao_silencio.wav"),
+     ["ether", "night"], ["deep", "contemplative"], 1200, "meditacao_silencio.wav", "https://assets.mixkit.co/active_storage/sfx/1190/1190-84.wav"),
     ("Meditação Vipassana: Observação", "Desenvolva clareza mental observando os pensamentos sem julgamento.",
-     ["ether", "air"], ["clear", "focused"], 1500, "meditacao_vipassana.wav"),
+     ["ether", "air"], ["clear", "focused"], 1500, "meditacao_vipassana.wav", "https://assets.mixkit.co/active_storage/sfx/1244/1244-84.wav"),
     ("Meditação Metta: Compaixão Infinita", "Cultive amor incondicional por si mesmo e pelos outros.",
-     ["heart", "light"], ["warm", "loving"], 900, "meditacao_metta.wav"),
+     ["heart", "light"], ["warm", "loving"], 900, "meditacao_metta.wav", "https://assets.mixkit.co/active_storage/sfx/1188/1188-84.wav"),
     ("Meditação Body Scan Profundo", "Percorra cada parte do seu corpo com consciência plena.",
-     ["earth", "root"], ["grounded", "calm"], 1200, "meditacao_body_scan.wav"),
+     ["earth", "root"], ["grounded", "calm"], 1200, "meditacao_body_scan.wav", "https://assets.mixkit.co/active_storage/sfx/2065/2065-84.wav"),
+    ("Meditação do Despertar", "Desperte sua consciência espiritual e cultive gratidão profunda.",
+     ["light", "heart"], ["luminous", "warm"], 900, "meditacao_despertar.wav", "https://assets.mixkit.co/active_storage/sfx/1244/1244-84.wav")
 ]
 
 SOUNDSCAPE_ITEMS = [
-    ("Sons da Floresta Tropical", "Ambientes naturais com pássaros e água.",
-     ["water", "earth"], ["calm", "airy"], 1800, "floresta_tropical.wav"),
-    ("Chuva Relaxante", "Som meditativo de chuva para descanso.",
-     ["water", "night"], ["calm", "dark"], 1800, "chuva_relaxante.wav"),
+    ("Sons da Floresta Tropical", "Ambientes naturais com pássaros e águas correntes.",
+     ["water", "earth"], ["calm", "airy"], 1800, "floresta_tropical.wav", "https://assets.mixkit.co/active_storage/sfx/1244/1244-84.wav"),
+    ("Chuva Relaxante", "Som meditativo de chuva contínua para descanso e sono.",
+     ["water", "night"], ["calm", "dark"], 1800, "chuva_relaxante.wav", "https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav"),
     ("Oceano ao Amanhecer", "Ondas suaves e sons costeiros inspiradores.",
-     ["water", "light"], ["calm", "luminous"], 1800, "oceano_amanhecer.wav"),
-    ("Floresta de Pinheiros à Noite", "Ambiente florestal profundo com sons noturnos subtis.",
-     ["earth", "night"], ["deep", "dark"], 1800, "floresta_pinheiros.wav"),
-    ("Ribeirão Cristalino", "Água corrente pura com pássaros ao fundo.",
-     ["water", "root"], ["gentle", "airy"], 1800, "ribeirao_cristalino.wav"),
-    ("Tempestade Distante", "Sons de trovão e chuva para meditação profunda.",
-     ["water", "ether"], ["calm", "contemplative"], 2400, "tempestade_distante.wav"),
+     ["water", "light"], ["calm", "luminous"], 1800, "oceano_amanhecer.wav", "https://assets.mixkit.co/active_storage/sfx/1188/1188-84.wav"),
+    ("Fogueira Estalando", "Ambiente aconchegante com o som acolhedor de madeira queimando.",
+     ["fire", "root"], ["warm", "grounded"], 1200, "fogueira_estalando.wav", "https://assets.mixkit.co/active_storage/sfx/2436/2436-84.wav"),
+    ("Vento nas Montanhas", "Sons do vento soprando suavemente pelos vales e picos elevados.",
+     ["air", "sky"], ["airy", "vast"], 1500, "vento_montanhas.wav", "https://assets.mixkit.co/active_storage/sfx/1190/1190-84.wav"),
+    ("Cachoeira Suave", "Som contínuo e revigorante de uma cachoeira no meio da natureza.",
+     ["water", "root"], ["gentle", "airy"], 1800, "cachoeira_suave.wav", "https://assets.mixkit.co/active_storage/sfx/2652/2652-84.wav"),
+    ("Ribeirão Cristalino", "Água corrente pura com pássaros e fauna florestal ao fundo.",
+     ["water", "root"], ["gentle", "airy"], 1800, "ribeirao_cristalino.wav", "https://assets.mixkit.co/active_storage/sfx/1233/1233-84.wav"),
+    ("Tempestade Distante", "Sons de trovão distante e chuva constante para meditação profunda.",
+     ["water", "ether"], ["calm", "contemplative"], 2400, "tempestade_distante.wav", "https://assets.mixkit.co/active_storage/sfx/1657/1657-84.wav"),
+    ("Selva Noturna", "O vibrante som da selva à noite com insetos e fauna ativa.",
+     ["earth", "night"], ["deep", "dark"], 1800, "selva_noturna.wav", "https://assets.mixkit.co/active_storage/sfx/2042/2042-84.wav"),
+    ("Grilos sob Neblina", "O canto calmo de grilos em uma noite de neblina e serenidade.",
+     ["water", "night"], ["calm", "deep"], 1800, "grilos_neblina.wav", "https://assets.mixkit.co/active_storage/sfx/2065/2065-84.wav")
 ]
 
 MUSIC_ITEMS = [
-    ("Harmonia Celestial", "Música ambiente minimalista com tons puros.",
-     ["ether", "light"], ["luminous", "sacred"], 900, "harmonia_celestial.wav"),
-    ("Acordes da Cura", "Frequências de relaxamento profundo e regeneração.",
-     ["heart", "light"], ["warm", "healing"], 1200, "acordes_cura.wav"),
-    ("Piano Meditativo", "Composição delicada para contemplação e paz.",
-     ["heart", "ether"], ["calm", "gentle"], 1500, "piano_meditativo.wav"),
-    ("Cristais Cantadores", "Sonic landscape experimental para expansão de consciência.",
-     ["ether", "fire"], ["vast", "luminous"], 1800, "cristais_cantadores.wav"),
+    ("Harmonia Celestial", "Música ambiente minimalista com tons puros de relaxamento.",
+     ["ether", "light"], ["luminous", "sacred"], 900, "harmonia_celestial.mp3", "https://assets.mixkit.co/music/preview/mixkit-forest-treasure-138.mp3"),
+    ("Acordes da Cura", "Frequências harmônicas para regeneração e paz interior.",
+     ["heart", "light"], ["warm", "healing"], 1200, "acordes_cura.mp3", "https://assets.mixkit.co/music/preview/mixkit-sleepy-cat-135.mp3"),
+    ("Piano Meditativo", "Composição delicada no piano para contemplação e calmaria.",
+     ["heart", "ether"], ["calm", "gentle"], 1500, "piano_meditativo.mp3", "https://assets.mixkit.co/music/preview/mixkit-serene-view-443.mp3"),
+    ("Pôr do Sol no Vale", "Melodia serena que acompanha o fim de tarde na natureza.",
+     ["heart", "light"], ["calm", "warm"], 900, "por_do_sol.mp3", "https://assets.mixkit.co/music/preview/mixkit-valley-sunset-127.mp3"),
+    ("Brisa Suave", "Melodia de harpa que induz a leveza e calma mental.",
+     ["air", "light"], ["airy", "gentle"], 1200, "brisa_suave.mp3", "https://assets.mixkit.co/music/preview/mixkit-gentle-breeze-105.mp3"),
+    ("Manhã Tranquila", "Sons instrumentais profundos para começar o dia centrando a mente.",
+     ["ether", "sky"], ["vast", "clear"], 1500, "manha_tranquila.mp3", "https://assets.mixkit.co/music/preview/mixkit-quiet-morning-1120.mp3"),
+    ("Gong de Meditação", "Ondas sonoras profundas e gongs sagrados para foco zen.",
+     ["ether", "fire"], ["sacred", "focused"], 1800, "gong_meditacao.mp3", "https://assets.mixkit.co/music/preview/mixkit-meditation-gong-1111.mp3"),
+    ("Jardim Zen", "Melodia oriental contemplativa inspiradora.",
+     ["air", "earth"], ["calm", "contemplative"], 1200, "jardim_zen.mp3", "https://assets.mixkit.co/music/preview/mixkit-zen-garden-1115.mp3"),
+    ("Mente Pacífica", "Sons reconfortantes para descompressão e foco.",
+     ["heart", "root"], ["grounded", "calm"], 1500, "mente_pacifica.mp3", "https://assets.mixkit.co/music/preview/mixkit-peaceful-mind-1118.mp3"),
+    ("Relaxamento Profundo", "Strings orquestrais lentas para o descanso ideal.",
+     ["heart", "light"], ["deep", "warm"], 1800, "relaxamento_profundo.mp3", "https://assets.mixkit.co/music/preview/mixkit-deep-relaxation-1124.mp3")
 ]
 
 BREATHING_ITEMS = [
@@ -341,6 +363,9 @@ def seed(reset: bool = False) -> None:
             "clareira_do_foco": "ceu_aberto",
             "raiz_da_montanha": "montanha_ao_amanhecer",
             "silencio_expandido": "ceu_estrelado",
+            "criatividade_fluida": "aurora_dourada",
+            "despertar_cosmico": "ceu_estrelado",
+            "cura_profunda": "chama_da_vela",
         }
         binaural_by_slug: dict[str, ContentItem] = {}
         for entry in manifest:
@@ -390,8 +415,9 @@ def seed(reset: bool = False) -> None:
             "Meditação Vipassana: Observação": "ceu_aberto",
             "Meditação Metta: Compaixão Infinita": "aurora_dourada",
             "Meditação Body Scan Profundo": "lago_sob_neblina",
+            "Meditação do Despertar": "aurora_dourada",
         }
-        for title, desc, axes, moods, duration, audio_file in MEDITATION_ITEMS:
+        for title, desc, axes, moods, duration, audio_file, cdn_url in MEDITATION_ITEMS:
             item = ContentItem(
                 title=title,
                 description=desc,
@@ -408,7 +434,8 @@ def seed(reset: bool = False) -> None:
             audio = AudioAsset(
                 content_item_id=item.id,
                 storage_path=f"audio/{audio_file}",
-                format="wav",
+                cdn_url=cdn_url,
+                format=audio_file.split(".")[-1],
                 sample_rate=44100,
                 channels=2,
                 is_loopable=item.type == "soundscape",
@@ -426,8 +453,13 @@ def seed(reset: bool = False) -> None:
             "Floresta de Pinheiros à Noite": "ceu_estrelado",
             "Ribeirão Cristalino": "rio_entre_pedras",
             "Tempestade Distante": "caverna_do_silencio",
+            "Fogueira Estalando": "chama_da_vela",
+            "Vento nas Montanhas": "ceu_aberto",
+            "Cachoeira Suave": "rio_entre_pedras",
+            "Selva Noturna": "floresta_azul",
+            "Grilos sob Neblina": "lago_sob_neblina",
         }
-        for title, desc, axes, moods, duration, audio_file in SOUNDSCAPE_ITEMS:
+        for title, desc, axes, moods, duration, audio_file, cdn_url in SOUNDSCAPE_ITEMS:
             item = ContentItem(
                 title=title,
                 description=desc,
@@ -444,7 +476,8 @@ def seed(reset: bool = False) -> None:
             audio = AudioAsset(
                 content_item_id=item.id,
                 storage_path=f"audio/{audio_file}",
-                format="wav",
+                cdn_url=cdn_url,
+                format=audio_file.split(".")[-1],
                 sample_rate=44100,
                 channels=2,
                 is_loopable=item.type == "soundscape",
@@ -460,8 +493,15 @@ def seed(reset: bool = False) -> None:
             "Acordes da Cura": "chama_da_vela",
             "Piano Meditativo": "aurora_dourada",
             "Cristais Cantadores": "ceu_aberto",
+            "Pôr do Sol no Vale": "aurora_dourada",
+            "Brisa Suave": "ceu_aberto",
+            "Manhã Tranquila": "montanha_ao_amanhecer",
+            "Gong de Meditação": "caverna_do_silencio",
+            "Jardim Zen": "lago_sob_neblina",
+            "Mente Pacífica": "rio_entre_pedras",
+            "Relaxamento Profundo": "ceu_estrelado",
         }
-        for title, desc, axes, moods, duration, audio_file in MUSIC_ITEMS:
+        for title, desc, axes, moods, duration, audio_file, cdn_url in MUSIC_ITEMS:
             item = ContentItem(
                 title=title,
                 description=desc,
@@ -478,7 +518,8 @@ def seed(reset: bool = False) -> None:
             audio = AudioAsset(
                 content_item_id=item.id,
                 storage_path=f"audio/{audio_file}",
-                format="wav",
+                cdn_url=cdn_url,
+                format=audio_file.split(".")[-1],
                 sample_rate=44100,
                 channels=2,
                 is_loopable=item.type == "soundscape",

@@ -71,6 +71,36 @@ SESSIONS = [
         "moods": ["contemplative", "vast", "sacred"],
         "description": "Batida percebida de 3 Hz em tom puro. Contemplação profunda.",
     },
+    {
+        "slug": "criatividade_fluida",
+        "title": "Criatividade Fluida",
+        "left_hz": 160.0,
+        "right_hz": 170.0,
+        "noise": "pink",
+        "axes": ["air", "light"],
+        "moods": ["creative", "airy"],
+        "description": "Batida percebida de 10 Hz sobre ruído rosa. Estímulo à criatividade e fluidez mental.",
+    },
+    {
+        "slug": "despertar_cosmico",
+        "title": "Despertar Cósmico",
+        "left_hz": 432.0,
+        "right_hz": 440.0,
+        "noise": "none",
+        "axes": ["ether", "sky"],
+        "moods": ["sacred", "vast"],
+        "description": "Batida percebida de 8 Hz com base na frequência natural de 432 Hz. Conexão e transcendência.",
+    },
+    {
+        "slug": "cura_profunda",
+        "title": "Cura Profunda",
+        "left_hz": 528.0,
+        "right_hz": 532.5,
+        "noise": "brown",
+        "axes": ["heart", "root"],
+        "moods": ["calm", "warm"],
+        "description": "Batida percebida de 4.5 Hz baseada na frequência de cura de 528 Hz sobre ruído marrom.",
+    },
 ]
 
 

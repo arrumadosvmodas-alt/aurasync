@@ -15,9 +15,19 @@ web-build/
 backend/aurasync.db
 storage/audio/*.wav
 storage/audio/*.mp3
+!storage/audio/portal_da_calma.wav
+!storage/audio/aguas_profundas.wav
+!storage/audio/clareira_do_foco.wav
+!storage/audio/raiz_da_montanha.wav
+!storage/audio/silencio_expandido.wav
+!storage/audio/criatividade_fluida.wav
+!storage/audio/despertar_cosmico.wav
+!storage/audio/cura_profunda.wav
 storage/images/*
 !storage/audio/.gitkeep
 !storage/images/.gitkeep
+
+
 
 # Ambiente
 .env
