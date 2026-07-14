@@ -10,6 +10,19 @@ import React, {
 
 import { api, ContentItem } from '../api/client';
 
+function isAuthError(error: unknown): boolean {
+  if (!(error instanceof Error)) return false;
+  const message = error.message.toLowerCase();
+  return (
+    message.includes('401') ||
+    message.includes('token') ||
+    message.includes('nao autenticado') ||
+    message.includes('n?o autenticado') ||
+    message.includes('usuario nao encontrado') ||
+    message.includes('usu?rio n?o encontrado')
+  );
+}
+
 export interface Preferences {
   primary_goal: string;
   night_goal?: string;
@@ -60,12 +73,20 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         const stored = await AsyncStorage.getItem('aurasync.auth');
         if (stored) {
           const parsed = JSON.parse(stored) as { token: string; email: string };
-          const savedPrefs = await api<Preferences>('/preferences', {
-            token: parsed.token,
-          }).catch(() => null);
+          try {
+            const savedPrefs = await api<Preferences>('/preferences', {
+              token: parsed.token,
+            });
+            setPrefs(savedPrefs);
+          } catch (error) {
+            if (isAuthError(error)) {
+              await AsyncStorage.removeItem('aurasync.auth');
+              return;
+            }
+            setPrefs(null);
+          }
           setToken(parsed.token);
           setEmail(parsed.email);
-          setPrefs(savedPrefs);
         }
       } catch {
         await AsyncStorage.removeItem('aurasync.auth');
@@ -82,10 +103,19 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     );
     setToken(newToken);
     setEmail(newEmail);
-    const savedPrefs = await api<Preferences>('/preferences', { token: newToken }).catch(
-      () => null,
-    );
-    setPrefs(savedPrefs);
+    try {
+      const savedPrefs = await api<Preferences>('/preferences', { token: newToken });
+      setPrefs(savedPrefs);
+    } catch (error) {
+      if (isAuthError(error)) {
+        await AsyncStorage.removeItem('aurasync.auth');
+        setToken(null);
+        setEmail(null);
+        setPrefs(null);
+        throw error;
+      }
+      setPrefs(null);
+    }
   }, []);
 
   const login = useCallback(
@@ -131,12 +161,25 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       if (!token) {
         throw new Error('Sessao expirada. Entre novamente para salvar suas preferencias.');
       }
-      const saved = await api<Preferences>('/onboarding', {
-        method: 'POST',
-        body: newPrefs,
-        token,
-      });
-      setPrefs(saved);
+      try {
+        const saved = await api<Preferences>('/onboarding', {
+          method: 'POST',
+          body: newPrefs,
+          token,
+        });
+        setPrefs(saved);
+      } catch (error) {
+        if (isAuthError(error)) {
+          await AsyncStorage.removeItem('aurasync.auth');
+          setToken(null);
+          setEmail(null);
+          setPrefs(null);
+          setSession(null);
+          setUserRole('user');
+          throw new Error('Sessao expirada. Entre novamente para continuar.');
+        }
+        throw error;
+      }
     },
     [token],
   );
