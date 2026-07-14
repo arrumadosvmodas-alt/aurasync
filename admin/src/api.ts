@@ -26,6 +26,7 @@ export interface User {
   id: string;
   email: string;
   display_name: string | null;
+  cpf: string | null;
   role: 'user' | 'admin';
   is_active: boolean;
   created_at: string;

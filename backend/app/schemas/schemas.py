@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
 from ..core.constants import CONTENT_TYPES, EXPERIENCE_LEVELS, GOALS
 
@@ -10,7 +10,18 @@ from ..core.constants import CONTENT_TYPES, EXPERIENCE_LEVELS, GOALS
 class RegisterRequest(BaseModel):
     email: EmailStr
     password: str = Field(min_length=8)
-    display_name: str | None = None
+    display_name: str = Field(min_length=2, max_length=120)
+    cpf: str = Field(min_length=11, max_length=14)
+
+    @field_validator("cpf")
+    @classmethod
+    def normalize_cpf(cls, value: str) -> str:
+        digits = "".join(ch for ch in value if ch.isdigit())
+        if len(digits) != 11:
+            raise ValueError("CPF deve conter 11 digitos")
+        if len(set(digits)) == 1:
+            raise ValueError("CPF invalido")
+        return digits
 
 
 class LoginRequest(BaseModel):
@@ -32,6 +43,7 @@ class UserOut(BaseModel):
     id: str
     email: str
     display_name: str | None
+    cpf: str | None
     role: str
     is_active: bool
 
@@ -42,6 +54,7 @@ class UserAdminOut(BaseModel):
     id: str
     email: str
     display_name: str | None
+    cpf: str | None
     role: str
     is_active: bool
     created_at: datetime

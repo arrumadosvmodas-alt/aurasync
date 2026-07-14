@@ -47,6 +47,7 @@ export function UsersTable({
           <tr>
             <th>E-mail</th>
             <th>Nome</th>
+            <th>CPF</th>
             <th>Papel</th>
             <th>Status</th>
             <th>Cadastro</th>
@@ -99,7 +100,7 @@ export function UsersTable({
               </tr>
               {errors[user.id] ? (
                 <tr>
-                  <td colSpan={6}>
+                  <td colSpan={7}>
                     <p className="error">{errors[user.id]}</p>
                   </td>
                 </tr>

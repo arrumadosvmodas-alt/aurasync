@@ -5,6 +5,40 @@ def test_health_e_meta(client):
     assert "médico" in meta["disclaimer"]
 
 
+def test_register_exige_nome_cpf_e_rejeita_cpf_duplicado(client):
+    payload = {
+        "email": "novo.usuario@aurasync.app",
+        "password": "senha12345",
+        "display_name": "Novo Usuario",
+        "cpf": "123.456.789-09",
+    }
+    created = client.post("/auth/register", json=payload)
+    assert created.status_code == 201, created.text
+    token = created.json()["access_token"]
+
+    me = client.get("/auth/me", headers={"Authorization": f"Bearer {token}"}).json()
+    assert me["display_name"] == "Novo Usuario"
+    assert me["cpf"] == "12345678909"
+
+    duplicate = client.post(
+        "/auth/register",
+        json={**payload, "email": "outro.usuario@aurasync.app"},
+    )
+    assert duplicate.status_code == 409
+    assert duplicate.json()["detail"] == "CPF ja cadastrado"
+
+    invalid = client.post(
+        "/auth/register",
+        json={
+            "email": "cpf.invalido@aurasync.app",
+            "password": "senha12345",
+            "display_name": "CPF Invalido",
+            "cpf": "111.111.111-11",
+        },
+    )
+    assert invalid.status_code == 422
+
+
 def test_fluxo_auth_onboarding_favoritos(client, auth_headers, admin_headers):
     # onboarding
     resp = client.post(

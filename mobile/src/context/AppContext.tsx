@@ -47,7 +47,7 @@ interface AppState {
   email: string | null;
   session: PlayerSession | null;
   login: (email: string, password: string, isAdmin?: boolean) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
+  register: (name: string, cpf: string, password: string, email?: string) => Promise<void>;
   logout: () => void;
   saveOnboarding: (prefs: Preferences) => Promise<void>;
   resetPrefs: () => void;
@@ -134,15 +134,23 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   );
 
   const register = useCallback(
-    async (newEmail: string, password: string) => {
+    async (name: string, cpf: string, password: string, email?: string) => {
+      const normalizedCpf = cpf.replace(/\D/g, '');
+      const newEmail = email?.trim() || `${normalizedCpf}@aurasync.local`;
       const resp = await api<{ access_token: string; refresh_token?: string }>(
         '/auth/register',
         {
           method: 'POST',
-          body: { email: newEmail, password },
+          body: {
+            email: newEmail,
+            password,
+            display_name: name.trim(),
+            cpf: normalizedCpf,
+          },
         },
       );
       await persist(resp.access_token, newEmail);
+      setUserRole('user');
     },
     [persist],
   );

@@ -16,10 +16,13 @@ import { useApp } from '../context/AppContext';
 import { colors, rounded, typography } from '../theme';
 
 export function LoginScreen() {
-  const { login, setUserRole } = useApp();
-  const [username, setUsername] = useState('Gabriel');
-  const [password, setPassword] = useState('******');
-  const [isAdmin, setIsAdmin] = useState(true);
+  const { login, register, setUserRole } = useApp();
+  const [mode, setMode] = useState<'login' | 'register'>('login');
+  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [password, setPassword] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -66,7 +69,7 @@ export function LoginScreen() {
               testID="username_input"
             />
 
-            <Text style={styles.label}>Senha JWT (PBKDF2)</Text>
+            <Text style={styles.label}>Senha</Text>
             <TextInput
               style={styles.input}
               value={password}
@@ -77,6 +80,7 @@ export function LoginScreen() {
               testID="password_input"
             />
 
+            {mode === 'login' ? (
             <Pressable
               style={styles.checkboxContainer}
               onPress={() => setIsAdmin(!isAdmin)}
@@ -93,6 +97,7 @@ export function LoginScreen() {
                 </Text>
               </View>
             </Pressable>
+            ) : null}
 
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
@@ -105,7 +110,7 @@ export function LoginScreen() {
               {busy ? (
                 <ActivityIndicator color="#FFFFFF" />
               ) : (
-                <Text style={styles.buttonText}>Autenticar e Entrar</Text>
+                <Text style={styles.buttonText}>{mode === 'register' ? 'Criar conta' : 'Entrar'}</Text>
               )}
             </Pressable>
           </View>
@@ -158,6 +163,35 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 24,
     fontFamily: typography.bodyMd.fontFamily,
+  },
+  modeRow: {
+    width: '100%',
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 20,
+  },
+  modeButton: {
+    flex: 1,
+    minHeight: 40,
+    borderRadius: 8,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: 'rgba(168, 181, 158, 0.5)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modeButtonActive: {
+    backgroundColor: '#141E0D',
+    borderColor: '#141E0D',
+  },
+  modeButtonText: {
+    color: '#797869',
+    fontSize: 13,
+    fontWeight: '700',
+    fontFamily: typography.labelMd.fontFamily,
+  },
+  modeButtonTextActive: {
+    color: '#FFFFFF',
   },
   form: {
     width: '100%',

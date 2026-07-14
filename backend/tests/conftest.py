@@ -37,7 +37,7 @@ def client():
 def auth_headers(client):
     resp = client.post(
         "/auth/register",
-        json={"email": "teste@aurasync.app", "password": "senha12345", "display_name": "Teste"},
+        json={"email": "teste@aurasync.app", "password": "senha12345", "display_name": "Teste", "cpf": "52998224725"},
     )
     assert resp.status_code == 201, resp.text
     token = resp.json()["access_token"]
@@ -53,6 +53,7 @@ def admin_headers(client, db):
         email="admin@aurasync.app",
         password_hash=hash_password("admin12345"),
         display_name="Admin",
+        cpf="15350946056",
         role="admin",
     )
     db.add(admin)

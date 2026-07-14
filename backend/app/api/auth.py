@@ -25,16 +25,21 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.post("/register", response_model=TokenResponse, status_code=201)
 def register(body: RegisterRequest, db: Session = Depends(get_db)):
-    exists = db.execute(select(User).where(User.email == body.email)).scalar_one_or_none()
-    if exists:
-        raise HTTPException(status.HTTP_409_CONFLICT, "E-mail já cadastrado")
+    email_exists = db.execute(select(User).where(User.email == body.email)).scalar_one_or_none()
+    if email_exists:
+        raise HTTPException(status.HTTP_409_CONFLICT, "E-mail ja cadastrado")
+    cpf_exists = db.execute(select(User).where(User.cpf == body.cpf)).scalar_one_or_none()
+    if cpf_exists:
+        raise HTTPException(status.HTTP_409_CONFLICT, "CPF ja cadastrado")
     user = User(
         email=body.email,
         password_hash=hash_password(body.password),
-        display_name=body.display_name,
+        display_name=body.display_name.strip(),
+        cpf=body.cpf,
     )
     db.add(user)
     db.commit()
+    db.refresh(user)
     return TokenResponse(
         access_token=create_access_token(user.id),
         refresh_token=create_refresh_token(user.id),
