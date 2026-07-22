@@ -116,23 +116,23 @@ def main():
         ("tempestade_distante.wav", "fire"),
         ("selva_noturna.wav", "wind"),
         ("grilos_neblina.wav", "wind"),
-        # Music (mp3 extension but wav content)
-        ("harmonia_celestial.mp3", "music"),
-        ("acordes_cura.mp3", "music"),
-        ("piano_meditativo.mp3", "music"),
-        ("por_do_sol.mp3", "music"),
-        ("brisa_suave.mp3", "music"),
-        ("manha_tranquila.mp3", "music"),
-        ("gong_meditacao.mp3", "music"),
-        ("jardim_zen.mp3", "music"),
-        ("mente_pacifica.mp3", "music"),
-        ("relaxamento_profundo.mp3", "music"),
+        # Music
+        ("harmonia_celestial.wav", "music"),
+        ("acordes_cura.wav", "music"),
+        ("piano_meditativo.wav", "music"),
+        ("por_do_sol.wav", "music"),
+        ("brisa_suave.wav", "music"),
+        ("manha_tranquila.wav", "music"),
+        ("gong_meditacao.wav", "music"),
+        ("jardim_zen.wav", "music"),
+        ("mente_pacifica.wav", "music"),
+        ("relaxamento_profundo.wav", "music"),
     ]
     
     print("Starting synthesis of nature, music, and meditation files...")
-    # Generate 5-second loops to keep files tiny (5s = ~880KB per file)
+    # Generate one-minute provisional loops so catalog metadata matches the files.
     for filename, mode in assets:
-        generate_ambient(filename, mode, 5.0, outdir)
+        generate_ambient(filename, mode, 60.0, outdir)
     print("All files synthesized successfully!")
 
 if __name__ == "__main__":

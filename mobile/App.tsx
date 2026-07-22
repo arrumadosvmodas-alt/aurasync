@@ -1,10 +1,13 @@
 import {
-  PlusJakartaSans_400Regular,
-  PlusJakartaSans_500Medium,
-  PlusJakartaSans_600SemiBold,
-  PlusJakartaSans_700Bold,
   useFonts,
-} from '@expo-google-fonts/plus-jakarta-sans';
+  Manrope_300Light,
+  Manrope_500Medium,
+  Manrope_600SemiBold,
+} from '@expo-google-fonts/manrope';
+import {
+  Heebo_300Light,
+  Heebo_400Regular,
+} from '@expo-google-fonts/heebo';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -115,10 +118,11 @@ function Root() {
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    PlusJakartaSans_400Regular,
-    PlusJakartaSans_500Medium,
-    PlusJakartaSans_600SemiBold,
-    PlusJakartaSans_700Bold,
+    Manrope_300Light,
+    Manrope_500Medium,
+    Manrope_600SemiBold,
+    Heebo_300Light,
+    Heebo_400Regular,
   });
 
   if (!fontsLoaded) {

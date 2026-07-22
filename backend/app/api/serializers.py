@@ -12,13 +12,7 @@ from ..schemas.schemas import (
     ImageAssetOut,
 )
 
-PUBLIC_AUDIO_FALLBACK_BY_TYPE = {
-    "binaural": "https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav",
-    "soundscape": "https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav",
-    "meditation": "https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav",
-    "music": "https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav",
-}
-
+PUBLIC_AUDIO_FALLBACK_BY_TYPE: dict[str, str] = {}
 
 def _media_url(storage_path: str | None) -> str | None:
     if not storage_path:
@@ -50,11 +44,11 @@ def _image_url(img: ImageAsset) -> str | None:
 
 
 def _audio_url(audio: AudioAsset, content_type: str) -> str:
-    if audio.cdn_url:
-        return audio.cdn_url
     local_url = _media_url(audio.storage_path)
     if local_url:
         return local_url
+    if audio.cdn_url:
+        return audio.cdn_url
     if os.environ.get("VERCEL") == "1":
         return PUBLIC_AUDIO_FALLBACK_BY_TYPE.get(content_type, "")
     return ""

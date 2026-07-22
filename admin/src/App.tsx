@@ -128,8 +128,9 @@ export default function App() {
         <button
           onClick={() => setTab('content')}
           style={{
-            background: tab === 'content' ? 'var(--primary)' : 'var(--surface-light)',
-            color: tab === 'content' ? 'var(--bg)' : 'var(--text)',
+            background: tab === 'content' ? 'var(--bright-blue)' : 'var(--surface-light)',
+            color: 'var(--text)',
+            border: tab === 'content' ? '1px solid var(--bright-blue)' : '1px solid var(--border)',
           }}
         >
           Conteúdo ({items.length})
@@ -137,8 +138,9 @@ export default function App() {
         <button
           onClick={() => setTab('users')}
           style={{
-            background: tab === 'users' ? 'var(--primary)' : 'var(--surface-light)',
-            color: tab === 'users' ? 'var(--bg)' : 'var(--text)',
+            background: tab === 'users' ? 'var(--bright-blue)' : 'var(--surface-light)',
+            color: 'var(--text)',
+            border: tab === 'users' ? '1px solid var(--bright-blue)' : '1px solid var(--border)',
           }}
         >
           Usuários ({users.length})

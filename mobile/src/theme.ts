@@ -1,72 +1,72 @@
 export const colors = {
-  background: '#FBF9F1', // Cosmic base warm cream
-  surface: '#FFFFFF', // Clean white surface cards
-  surfaceBright: '#FFFFFF',
-  surfaceContainer: '#F5F3E7', // Warm cream container
-  surfaceContainerLow: '#E6E1D4', // Warm sand/beige
-  surfaceContainerHigh: '#DDE6D5', // Soft light green-tinted grey
-  surfaceContainerHighest: '#C5D3C1',
-  surfaceVariant: '#E6E1D4',
-  onSurface: '#1D1C16', // Dark text
-  onSurfaceVariant: '#797869', // Muted brown-grey text
-  primary: '#141E0D', // Dark forest green-black primary
+  background: '#040D43', // Hexaware Black/Darkest Blue
+  surface: '#07125E', // Hexaware Dark Blue
+  surfaceBright: '#121E6C', // Lighter container blue
+  surfaceContainer: '#121E6C',
+  surfaceContainerLow: '#07125E',
+  surfaceContainerHigh: '#1D86FF', // Bright Blue
+  surfaceContainerHighest: '#3C2CDA', // Hexaware Blue
+  surfaceVariant: '#535983', // Border Dark
+  onSurface: '#FFFFFF', // White text
+  onSurfaceVariant: '#8088A7', // Silver text
+  primary: '#3C2CDA', // Hexaware Blue primary
   onPrimary: '#FFFFFF',
-  primaryContainer: '#DDE6D5', // Soft sage/olive light green container
-  onPrimaryContainer: '#141E0D',
-  secondary: '#D0902F', // Golden brown / accent
+  primaryContainer: '#07125E',
+  onPrimaryContainer: '#FFFFFF',
+  secondary: '#1D86FF', // Bright Blue
   onSecondary: '#FFFFFF',
-  secondaryContainer: '#F9ECD5',
-  onSecondaryContainer: '#D0902F',
-  tertiary: '#7DA083', // Sage green accent
+  secondaryContainer: '#121E6C',
+  onSecondaryContainer: '#1D86FF',
+  tertiary: '#14CBDE', // Electric Blue accent
   onTertiary: '#FFFFFF',
-  error: '#EF4444',
+  error: '#DA2D2C', // Error red
   onError: '#FFFFFF',
   errorContainer: '#FEE2E2',
-  onErrorContainer: '#EF4444',
-  outline: '#A8B59E', // Sage-grey border
-  outlineVariant: '#E6E1D4',
+  onErrorContainer: '#DA2D2C',
+  outline: '#535983', // Border Dark
+  outlineVariant: '#8088A7',
   /* backward compatibility aliases */
-  accent: '#D0902F',
-  text: '#1D1C16',
-  textDim: '#797869',
-  surfaceLight: '#E6E1D4',
-  danger: '#EF4444',
+  accent: '#EA9D00', // Honey
+  text: '#FFFFFF',
+  textDim: '#8088A7',
+  surfaceLight: '#121E6C',
+  danger: '#DA2D2C',
 };
 
 export const typography = {
   headlineLg: {
-    fontFamily: 'PlusJakartaSans_700Bold',
+    fontFamily: 'Manrope_300Light',
     fontSize: 30,
-    fontWeight: '700' as const,
+    fontWeight: '300' as const,
     lineHeight: 36,
   },
   headlineMd: {
-    fontFamily: 'PlusJakartaSans_600SemiBold',
+    fontFamily: 'Manrope_500Medium',
     fontSize: 24,
-    fontWeight: '600' as const,
+    fontWeight: '500' as const,
     lineHeight: 31,
   },
   bodyLg: {
-    fontFamily: 'PlusJakartaSans_400Regular',
+    fontFamily: 'Heebo_300Light',
     fontSize: 18,
-    fontWeight: '400' as const,
+    fontWeight: '300' as const,
     lineHeight: 29,
   },
   bodyMd: {
-    fontFamily: 'PlusJakartaSans_400Regular',
+    fontFamily: 'Heebo_400Regular',
     fontSize: 16,
     fontWeight: '400' as const,
     lineHeight: 26,
   },
   labelMd: {
-    fontFamily: 'PlusJakartaSans_500Medium',
+    fontFamily: 'Manrope_500Medium',
     fontSize: 14,
     fontWeight: '500' as const,
     lineHeight: 20,
     letterSpacing: 0.7,
   },
   labelSm: {
-    fontFamily: 'PlusJakartaSans_600SemiBold',
+    fontFamily: 'Manrope_600SemiBold',
     fontSize: 12,
     fontWeight: '600' as const,
     lineHeight: 17,

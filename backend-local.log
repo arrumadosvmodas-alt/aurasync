@@ -1,0 +1,63 @@
+Banco já populado — use --reset para recriar.
+INFO:     127.0.0.1:63006 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59571 - "HEAD /media/audio/meditacao_zen_manha.wav HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59577 - "HEAD /media/images/lago_sob_neblina.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59579 - "GET /catalog/complete HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54698 - "OPTIONS /auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54698 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54698 - "OPTIONS /preferences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54698 - "GET /preferences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54698 - "OPTIONS /recommendations?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54698 - "GET /recommendations?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58572 - "GET /media/images/ceu_estrelado.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56890 - "GET /media/audio/meditacao_despertar.wav HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:63741 - "OPTIONS /history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63741 - "POST /history HTTP/1.1" 201 Created
+INFO:     127.0.0.1:49670 - "OPTIONS /catalog HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49670 - "GET /catalog HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58236 - "GET /media/images/floresta_azul.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65254 - "GET /media/images/lago_sob_neblina.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "GET /media/images/oceano_calmo.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60834 - "GET /media/images/chama_da_vela.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50327 - "GET /media/images/ceu_aberto.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63174 - "GET /media/images/rio_entre_pedras.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "GET /media/images/caverna_do_silencio.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64547 - "GET /media/audio/chuva_relaxante.wav HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:51899 - "POST /history HTTP/1.1" 201 Created
+INFO:     127.0.0.1:55631 - "GET /media/audio/oceano_amanhecer.wav HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:56334 - "POST /history HTTP/1.1" 201 Created
+INFO:     127.0.0.1:54670 - "GET /media/audio/fogueira_estalando.wav HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:56014 - "POST /history HTTP/1.1" 201 Created
+INFO:     127.0.0.1:64820 - "GET /media/audio/vento_montanhas.wav HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:49395 - "POST /history HTTP/1.1" 201 Created
+INFO:     127.0.0.1:54193 - "GET /media/images/aurora_dourada.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52679 - "GET /media/images/montanha_ao_amanhecer.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52679 - "GET /media/audio/silencio_expandido.wav HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:54442 - "POST /history HTTP/1.1" 201 Created
+INFO:     127.0.0.1:61390 - "GET /media/images/rio_entre_pedras.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49899 - "GET /media/images/lago_sob_neblina.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:64533 - "GET /media/images/caverna_do_silencio.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:64533 - "GET /media/audio/meditacao_metta.wav HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:53081 - "OPTIONS /preferences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53081 - "GET /preferences HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53081 - "OPTIONS /recommendations?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53081 - "GET /recommendations?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51402 - "GET /media/images/ceu_estrelado.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61745 - "OPTIONS /catalog/complete HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61745 - "GET /catalog/complete HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49936 - "GET /media/images/floresta_azul.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49924 - "GET /media/images/oceano_calmo.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:58026 - "GET /media/images/ceu_aberto.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61926 - "GET /media/images/montanha_ao_amanhecer.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:60421 - "GET /media/images/aurora_dourada.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49670 - "GET /media/images/chama_da_vela.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:60421 - "GET /media/images/caverna_do_silencio.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49670 - "GET /media/images/lago_sob_neblina.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49924 - "GET /media/images/rio_entre_pedras.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61911 - "GET /media/audio/portal_da_calma.wav HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:63921 - "POST /history HTTP/1.1" 201 Created
+INFO:     127.0.0.1:52315 - "GET /media/audio/aguas_profundas.wav HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:60856 - "OPTIONS /history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60856 - "POST /history HTTP/1.1" 201 Created
+INFO:     127.0.0.1:65351 - "GET /media/audio/floresta_tropical.wav HTTP/1.1" 206 Partial Content
+INFO:     127.0.0.1:63809 - "POST /history HTTP/1.1" 201 Created

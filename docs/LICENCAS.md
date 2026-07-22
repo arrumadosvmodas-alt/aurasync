@@ -16,6 +16,18 @@
 > verificação. O backend bloqueia a publicação de conteúdo cujo asset não tenha
 > licença registrada.
 
+
+## Pacote local atual
+
+O pacote local atual usa conteudo proprio do **AuraSync Procedural Media Kit**, registrado como **CC0 1.0 Universal** em `asset_licenses`. O manifesto tecnico fica em [MEDIA_MANIFEST.md](MEDIA_MANIFEST.md).
+
+Antes de publicar ou trocar assets, rode:
+
+```powershell
+python scripts\audit_media.py
+python -m pytest backend\tests
+```
+
 ## Fontes recomendadas
 
 ### Música

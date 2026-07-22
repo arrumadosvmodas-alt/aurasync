@@ -185,9 +185,11 @@ def main() -> None:
                 "duration_seconds": int(args.duration),
                 "sample_rate": SAMPLE_RATE,
                 "license": {
-                    "source_name": "AuraSync (conteúdo próprio)",
+                    "source_name": "AuraSync Procedural Media Kit",
+                    "source_url": "https://github.com/aurasync/app",
                     "author_name": "AuraSync",
-                    "license_name": "Proprietary (obra própria)",
+                    "license_name": "CC0 1.0 Universal",
+                    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
                     "attribution_required": False,
                     "commercial_use_allowed": True,
                     "derivative_allowed": True,

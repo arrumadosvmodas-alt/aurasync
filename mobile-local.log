@@ -1,0 +1,40 @@
+Starting project at C:\AuraSync\mobile
+Starting Metro Bundler
+
+warning: Bundler cache is empty, rebuilding (this may take a minute)
+Waiting on http://localhost:8081
+
+Logs for your project will appear below.
+Web Bundled 9901ms index.ts (622 modules)
+Web  INFO  %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+Web  WARN  [expo-av]: Expo AV has been deprecated and will be removed in SDK 54. Use the `expo-audio` and `expo-video` packages to replace the required functionality.
+Web  WARN  "shadow*" style props are deprecated. Use "boxShadow".
+Web  LOG  Running application "main" with appParams:
+ {"hydrate": undefined, "rootTag": "#root"} 
+Development-level warnings: ON.
+Performance optimizations: OFF.
+Web  WARN  props.pointerEvents is deprecated. Use style.pointerEvents
+Web  WARN  Animated: `useNativeDriver` is not supported because the native animated module is missing. Falling back to JS-based animation. To resolve this, add `RCTAnimation` module to this app, or remove `useNativeDriver`. Make sure to run `bundle exec pod install` first. Read more about autolinking: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md
+Web  ERROR  
+
+Code: App.tsx
+[0m [90m 108 |[39m         [33m<[39m[33m/[39m[33mNavigationContainer[39m[33m>[39m
+ [90m 109 |[39m       )}
+[31m[1m>[22m[39m[90m 110 |[39m       {session [33m?[39m [33m<[39m[33mImmersivePlayer[39m [33m/[39m[33m>[39m [33m:[39m [36mnull[39m}
+ [90m     |[39m                  [31m[1m^[22m[39m
+ [90m 111 |[39m       [33m<[39m[33mStatusBar[39m style[33m=[39m[32m"light"[39m [33m/[39m[33m>[39m
+ [90m 112 |[39m     [33m<[39m[33m/[39m[33m>[39m
+ [90m 113 |[39m   )[33m;[39m[0m
+Call Stack
+  Root (App.tsx:110:18)
+  App (App.tsx:134:7)
+Web Bundled 44ms index.ts (1 module)
+Web  INFO  %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+Web  WARN  [expo-av]: Expo AV has been deprecated and will be removed in SDK 54. Use the `expo-audio` and `expo-video` packages to replace the required functionality.
+Web  WARN  "shadow*" style props are deprecated. Use "boxShadow".
+Web  LOG  Running application "main" with appParams:
+ {"hydrate": undefined, "rootTag": "#root"} 
+Development-level warnings: ON.
+Performance optimizations: OFF.
+Web  WARN  props.pointerEvents is deprecated. Use style.pointerEvents
+Web  WARN  Animated: `useNativeDriver` is not supported because the native animated module is missing. Falling back to JS-based animation. To resolve this, add `RCTAnimation` module to this app, or remove `useNativeDriver`. Make sure to run `bundle exec pod install` first. Read more about autolinking: https://github.com/react-native-community/cli/blob/master/docs/autolinking.md

@@ -1,3 +1,21 @@
+import wave
+
+from app.core.config import settings
+
+
+def _write_test_wav(relative_path: str, duration_seconds: float = 1.0) -> None:
+    path = settings.storage_dir / relative_path
+    path.parent.mkdir(parents=True, exist_ok=True)
+    sample_rate = 44100
+    frames = int(sample_rate * duration_seconds)
+    silence = b"\x00\x00" * 2 * frames
+    with wave.open(str(path), "wb") as wav:
+        wav.setnchannels(2)
+        wav.setsampwidth(2)
+        wav.setframerate(sample_rate)
+        wav.writeframes(silence)
+
+
 def test_health_e_meta(client):
     assert client.get("/health").json()["status"] == "ok"
     meta = client.get("/meta").json()
@@ -61,9 +79,10 @@ def test_fluxo_auth_onboarding_favoritos(client, auth_headers, admin_headers):
         json={"title": "Portal Teste", "type": "binaural", "spiritual_axis": ["water"]},
         headers=admin_headers,
     ).json()
+    _write_test_wav("audio/teste.wav")
     audio = client.post(
         f"/admin/content/{item['id']}/audio",
-        json={"storage_path": "audio/teste.wav", "format": "wav"},
+        json={"storage_path": "audio/teste.wav", "format": "wav", "sample_rate": 44100, "channels": 2},
         headers=admin_headers,
     ).json()
     client.post(
@@ -128,9 +147,10 @@ def test_catalogo_completo_retorna_midias_publicadas(client, admin_headers):
         json={"title": "Audio Publicado", "type": "music", "spiritual_axis": ["air"]},
         headers=admin_headers,
     ).json()
+    _write_test_wav("audio/audio-publicado.wav")
     audio = client.post(
         f"/admin/content/{item['id']}/audio",
-        json={"storage_path": "audio/audio-publicado.wav", "format": "wav"},
+        json={"storage_path": "audio/audio-publicado.wav", "format": "wav", "sample_rate": 44100, "channels": 2},
         headers=admin_headers,
     ).json()
     client.post(
